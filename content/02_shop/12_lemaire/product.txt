@@ -1,0 +1,33 @@
+Title: Lemaire
+
+----
+
+Shortdescription: Beige backpack with logo hardware
+
+----
+
+Productimage:
+
+- file://gv07zexl0vu3eczs
+
+----
+
+Hoverimage:
+
+- file://zqslyu2uhue2ccf0
+
+----
+
+Color: Sand
+
+----
+
+Price: 141
+
+----
+
+Stock: 10
+
+----
+
+Uuid: zvliraaayh5o29xp

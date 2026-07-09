@@ -1,0 +1,54 @@
+@use "../abstracts" as *;
+
+.checkout {
+  padding: var(--site-padding);
+  display: grid;
+  grid-template-columns: 40rem 1fr;
+  gap: 10rem;
+  &__title {
+    margin-bottom: 5rem;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .checkout__honeypot {
+      display: none;
+    }
+
+    .checkout__row {
+      display: flex;
+      gap: 1rem;
+
+      .checkout__field {
+        flex: 1;
+      }
+    }
+
+    .checkout__field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    // Underline style, matching `.newsletter__input`
+    .checkout__input {
+      border-bottom: 1px solid var(--gray);
+      font-size: var(--fs-sm);
+      font-family: var(--ff-mono);
+      padding: 1rem 0;
+
+      &--textarea {
+        resize: vertical;
+      }
+    }
+
+    .checkout__error {
+      color: var(--color-error);
+    }
+
+    .checkout__submit {
+      @include btn(secondary);
+    }
+  }
+}

@@ -1,0 +1,72 @@
+title: order
+
+status:
+  draft: Incomplete
+  unlisted: Issue
+  listed: Complete
+
+tabs:
+  productOverview:
+    label: Ticket
+    icon: draft
+    sections:
+      orderDetails:
+        type: fields
+        fields:
+          items:
+            label: Items
+            type: structure
+            translate: false
+            fields:
+              title:
+                label: Title
+                type: text
+                required: true
+              quantity:
+                label: Quantity
+                type: number
+                required: true
+                width: 1/2
+              price:
+                extends: fields/price
+                type: number
+                required: true
+                width: 1/2
+
+  buyerInformation:
+    label: Buyer Information
+    icon: user
+    sections:
+      buyerInformation:
+        type: fields
+        fields:
+          name:
+            label: Name
+            type: text
+            width: 1/2
+          surname:
+            label: Surname
+            type: text
+            width: 1/2
+          email:
+            label: Email
+            type: email
+          address:
+            label: Address
+            type: text
+          zipcode:
+            label: Zip code
+            type: text
+            width: 1/3
+          city:
+            label: City
+            type: text
+            width: 1/3
+          country:
+            label: Country
+            type: text
+            width: 1/3
+          additionalInformations:
+            label: Additional information
+            type: textarea
+            size: small

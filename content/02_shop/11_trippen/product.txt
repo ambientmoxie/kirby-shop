@@ -1,0 +1,33 @@
+Title: Trippen
+
+----
+
+Shortdescription: Pink high boots with heart-shaped heel
+
+----
+
+Productimage:
+
+- file://24ikrqe1g5hbx29r
+
+----
+
+Hoverimage:
+
+- file://esc8vm346fmhcjpu
+
+----
+
+Color: Slate Grey
+
+----
+
+Price: 60
+
+----
+
+Stock: 10
+
+----
+
+Uuid: hxmn3msdh9r9ih12

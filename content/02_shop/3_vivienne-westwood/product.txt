@@ -1,0 +1,33 @@
+Title: Vivienne Westwood
+
+----
+
+Shortdescription: Brown wool double-breasted blazer
+
+----
+
+Productimage:
+
+- file://pzc6yqlng7r5l34e
+
+----
+
+Hoverimage:
+
+- file://vo4xmjzepwi3rn5g
+
+----
+
+Color: Oxblood
+
+----
+
+Price: 1800
+
+----
+
+Stock: 10
+
+----
+
+Uuid: 0uqui6dfbfe8x411

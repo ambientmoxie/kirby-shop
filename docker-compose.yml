@@ -1,0 +1,30 @@
+services:
+  php:
+    build: .
+    working_dir: /var/www/html
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+      - kirby:/var/www/html/kirby
+    environment:
+      VITE_DEV: true
+      APP_URL: http://127.0.0.1:8888
+    command: sh -c "composer install && php -S 0.0.0.0:8888 -t public ./kirby/router.php"
+
+  node:
+    image: node:20-alpine
+    working_dir: /var/www/html
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    command: sh -c "npm install && npm run vite"
+
+volumes:
+  node_modules:
+  vendor:
+  kirby:
+

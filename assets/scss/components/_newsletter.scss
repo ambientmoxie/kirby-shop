@@ -1,0 +1,41 @@
+@use "../abstracts" as *;
+
+
+.newsletter {
+  padding: var(--site-padding);
+  width: 50rem;
+  font-size: 1.3rem;
+
+  &__surtitle {
+    margin-bottom: 1rem;
+  }
+
+  &__catchphrase {
+    margin-bottom: 2rem;
+  }
+
+  &__honeypot {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &__form {
+    margin-bottom: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+  }
+
+  &__input {
+    border-bottom: 1px solid #ececec;
+    font-size: 1.3rem;
+    font-family: var(--ff-mono);
+    
+  }
+
+  &__submit {
+    @include btn();
+  }
+}

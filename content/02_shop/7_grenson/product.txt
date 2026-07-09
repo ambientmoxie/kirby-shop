@@ -1,0 +1,33 @@
+Title: Grenson
+
+----
+
+Shortdescription: Pink striped track trousers
+
+----
+
+Productimage:
+
+- file://quwkhmbdczuzmx43
+
+----
+
+Hoverimage:
+
+- file://4jwzkrvomjm0ee5h
+
+----
+
+Color: Tan
+
+----
+
+Price: 312
+
+----
+
+Stock: 10
+
+----
+
+Uuid: yj28x2ycywit6fes

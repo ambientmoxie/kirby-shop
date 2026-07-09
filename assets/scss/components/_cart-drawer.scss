@@ -1,0 +1,93 @@
+@use "../abstracts" as *;
+
+.cart-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: hidden;
+
+  &.is-open {
+    visibility: visible;
+  }
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  &.is-open &__backdrop {
+    opacity: 1;
+  }
+
+  &__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 42rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+  }
+
+  &.is-open &__panel {
+    transform: translateX(0);
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2rem;
+    border-bottom: 1px solid var(--gray);
+  }
+
+  &__title {
+    font-size: var(--fs-sm);
+    text-transform: uppercase;
+    font-family: var(--ff-mono);
+  }
+
+  &__close {
+    @include btn(tertiary);
+  }
+
+  // the only scrolling region, so a long cart can't push the footer off screen
+  &__items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+
+    > *:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__foot {
+    padding: 2rem;
+    border-top: 1px solid var(--gray);
+  }
+
+  &__subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--ff-mono);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  &__checkout {
+    @include btn(secondary);
+  }
+}
+
+// stop the page behind the drawer from scrolling
+body.is-drawer-open {
+  overflow: hidden;
+}

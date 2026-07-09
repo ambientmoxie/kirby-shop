@@ -1,0 +1,16 @@
+title: Checkout
+icon: cart
+
+fields:
+  checkoutTitle:
+    label: Checkout Title
+    type: text
+    required: true
+  checkoutDescriptionStripe:
+    label: Checkout Description Stripe
+    type: textarea
+    required: true
+  checkoutDescriptionNormal:
+    label: Checkout Description Normal
+    type: textarea
+    required: true

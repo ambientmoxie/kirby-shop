@@ -1,0 +1,19 @@
+title: Success
+icon: check
+
+fields:
+  successTitle:
+    label: Page Title
+    type: text
+  successDescriptionNewsletter:
+    label: Description (Newsletter)
+    type: textarea
+  successDescriptionContact:
+    label: Description (Contact Form)
+    type: textarea
+  successDescriptionCheckout:
+    label: Description (Checkout)
+    type: textarea
+  successDescriptionStripe:
+    label: Description (Stripe Payment)
+    type: textarea

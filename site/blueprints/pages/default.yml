@@ -1,0 +1,11 @@
+title: Default Page
+options:
+  changeStatus: false
+
+sections:
+  fields:
+    type: fields
+    fields:
+      text:
+        type: textarea
+        size: medium

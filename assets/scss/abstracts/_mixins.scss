@@ -1,0 +1,36 @@
+// Shared button typography plus one of three variants.
+// Unknown variants fail the build rather than silently emitting no styling.
+@mixin btn($variant: primary) {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-sm);
+  padding: 0.8rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+
+  @if $variant == primary {
+    border: 1px solid var(--gray);
+    color: var(--color-txt);
+    &:not([disabled]):hover {
+      border: 1px solid var(--black);
+    }
+  } @else if $variant == secondary {
+    display: block;
+    margin-top: 1rem;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 1rem;
+    text-align: center;
+    &:not([disabled]):hover {
+      opacity: 0.9;
+    }
+  } @else if $variant == tertiary {
+    padding: 0;
+    color: var(--color-txt);
+    text-transform: capitalize;
+    &:not([disabled]):hover {
+      opacity: 0.5;
+    }
+  } @else {
+    @error "Unknown btn variant `#{$variant}`. Expected primary, secondary or tertiary.";
+  }
+}

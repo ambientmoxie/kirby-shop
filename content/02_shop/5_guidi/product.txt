@@ -1,0 +1,33 @@
+Title: Guidi
+
+----
+
+Shortdescription: Blue striped oversized long-sleeve polo shirt
+
+----
+
+Productimage: - file://9wp9qmhhm6r69otp
+
+----
+
+Hoverimage: - file://i1kmsitlghtpu7us
+
+----
+
+Isnew: false
+
+----
+
+Color: Charcoal
+
+----
+
+Price: 90
+
+----
+
+Stock: 9
+
+----
+
+Uuid: nu9px07jdplo6v5g

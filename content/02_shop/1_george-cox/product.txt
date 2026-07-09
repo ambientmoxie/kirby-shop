@@ -1,0 +1,37 @@
+Title: George Cox
+
+----
+
+Shortdescription: Blue fringed midi skirt
+
+----
+
+Productimage:
+
+- file://czcqklmqk3xnsexz
+
+----
+
+Hoverimage:
+
+- file://h5fd9h5bpwlbz98w
+
+----
+
+Isnew: true
+
+----
+
+Color: Dark Blue
+
+----
+
+Price: 2000
+
+----
+
+Stock: 10
+
+----
+
+Uuid: ka95hwqtlz8ytc18

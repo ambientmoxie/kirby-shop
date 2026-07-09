@@ -1,0 +1,33 @@
+Title: Church's
+
+----
+
+Shortdescription: Black casual track trousers with elastic waist
+
+----
+
+Productimage:
+
+- file://shjqdq2zumt7rr93
+
+----
+
+Hoverimage:
+
+- file://cb97jl92hf88sugv
+
+----
+
+Color: Chestnut
+
+----
+
+Price: 3200
+
+----
+
+Stock: 10
+
+----
+
+Uuid: d6dfuf60w1f2iis0

@@ -1,0 +1,33 @@
+Title: Marsell
+
+----
+
+Shortdescription: White tiered midi skirt in crinkled chiffon crepe
+
+----
+
+Productimage:
+
+- file://krsr5y727otmtbzo
+
+----
+
+Hoverimage:
+
+- file://qmspjbnji8vx5ydm
+
+----
+
+Color: Black Leather
+
+----
+
+Price: 2000
+
+----
+
+Stock: 10
+
+----
+
+Uuid: qynthdddne7hhpdx

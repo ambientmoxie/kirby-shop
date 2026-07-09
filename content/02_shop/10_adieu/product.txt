@@ -1,0 +1,33 @@
+Title: Adieu
+
+----
+
+Shortdescription: Black knee-high boots with arched sole
+
+----
+
+Productimage:
+
+- file://6v151uz9udo8yw84
+
+----
+
+Hoverimage:
+
+- file://ctxwuxpk2t3b1kgv
+
+----
+
+Color: Off White
+
+----
+
+Price: 1600
+
+----
+
+Stock: 10
+
+----
+
+Uuid: kdtuwsuc7nghvdgd

@@ -1,0 +1,211 @@
+title: Home
+icon: home
+options:
+  sort: false
+  move: false
+  delete: false
+  duplicate: false
+  changeTitle: false
+  changeStatus: false
+  changeTemplate: false
+  changeSlug: false
+
+tabs:
+  content:
+    label: Content
+    icon: text
+
+    sections:
+      # SECTION 1 — HERO
+      hero:
+        type: fields
+        fields:
+          heroHeadline:
+            label: Hero
+            type: headline
+
+          heroMedia:
+            label: Video / Image
+            type: files
+            layout: cards
+            image: 
+              cover: true
+
+      # SECTION 2 — CLAIM
+      claim:
+        type: fields
+        fields:
+          claimLine:
+            type: line
+          claimHeadline:
+            label: Claim
+            type: headline
+          claimText:
+            label: Text
+            type: text
+
+      # SECTION 3 — ABOUT
+      about:
+        type: fields
+        fields:
+          aboutLine:
+            type: line
+
+          aboutHeadline:
+            label: About
+            type: headline
+
+          aboutTitle:
+            label: About title
+            type: text
+
+          aboutText1:
+            label: About text part 1
+            type: textarea
+            width: 1/2
+          aboutText2:
+            label: About text part 2
+            type: textarea
+            width: 1/2
+
+          values:
+            label: Cards
+            type: structure
+            fields:
+              title:
+                label: Title
+                type: text
+              text:
+                label: Text
+                type: textarea
+                size: small
+
+      # SECTION 4 — GALLERY
+      gallery:
+        type: fields
+        fields:
+          galleryLine:
+            type: line
+
+          galleryHeadline:
+            label: Gallery
+            type: headline
+
+          galleryImages:
+            label: Images
+            type: files
+            multiple: true
+            layout: cards
+            image:
+              cover: true
+
+      # SECTION 5 — SHOP (POLE)
+      shopSection:
+        type: fields
+        fields:
+          shopLine:
+            type: line
+
+          shopHeadline:
+            label: Shop — Pole
+            type: headline
+
+          shopTitle:
+            label: Title
+            type: text
+
+      shop:
+        type: pages
+        headline: Sizes
+        query: site.find("shop").children.first.children
+        layout: list
+        image:
+          query: false
+          back: black
+
+      # SECTION 6 — MODULES COLLECTION
+      modulesSection:
+        type: fields
+        fields:
+          modulesLine:
+            type: line
+
+          modulesHeadline:
+            label: Modules
+            type: headline
+
+      modules:
+        type: pages
+        headline: List
+        query: site.find("modules").children
+        layout: list
+        image:
+          cover: true
+
+      # SECTION 5 — ENVIRONMENTS
+      environments:
+        type: fields
+        fields:
+          environmentsLine:
+            type: line
+
+          environmentsHeadline:
+            label: Environments
+            type: headline
+
+          envSurtitle:
+            label: Surtitle
+            type: text
+            width: 1/4
+
+          envTitle:
+            label: Title
+            type: text
+            width: 3/4
+
+          envCards:
+            label: Environments
+            type: structure
+            fields:
+
+              envCardTitle:
+                label: Title
+                type: text
+              envCardImage:
+                label: Image
+                type: files
+                multiple: false
+                layout: cards
+                image:
+                  cover: true
+              envCardDoc:
+                label: PDF File
+                type: files
+                multiple: false
+                layout: cards
+
+      statement:
+        type: fields
+        fields:
+          statementLine:
+            type: line
+          statementHeadline:
+            label: Statement
+            type: headline
+          statementParagraph:
+            label: Paragraph
+            type: textarea
+          statementAuthor:
+            label: Author
+            type: text
+
+  files:
+    label: Files
+    icon: image
+    sections:
+      files:
+        type: files
+        headline: All files
+        layout: list
+
+  seo: tabs/seo/meta

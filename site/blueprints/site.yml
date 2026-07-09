@@ -1,0 +1,120 @@
+title: Site
+
+tabs:
+
+  store:
+    label: Store
+    icon: globe
+
+    columns:
+      # LEFT (2/3) — PUBLISHED PRODUCTS
+      products:
+        width: 2/3
+        sections:
+          listed:
+            headline: Products
+            type: pages
+            parent: site.find("shop")
+            status: listed
+            create: product
+            templates:
+              - product
+            image:
+              back: black
+              cover: true
+
+      # RIGHT (1/3) — DRAFTS + UNLISTED
+      sidebar:
+        width: 1/3
+        sections:
+          drafts:
+            headline: Drafts
+            type: pages
+            parent: site.find("shop")
+            status: draft
+            create: product
+            templates:
+              - product
+
+          unlisted:
+            headline: Unlisted
+            type: pages
+            parent: site.find("shop")
+            status: unlisted
+            create: false
+            templates:
+              - product
+
+  orders:
+    label: Orders
+    icon: draft
+
+    columns:
+      left:
+        width: 2/3
+        sections:
+          pendingOrders:
+            headline: Pending orders
+            type: pages
+            parent: site.find("orders")
+            status: draft
+            create: false
+            templates:
+              - order
+            limit: 50
+
+      right:
+        width: 1/3
+        sections:
+          completedOrders:
+            headline: Completed
+            type: pages
+            parent: site.find("orders")
+            status: listed
+            create: false
+            templates:
+              - order
+            limit: 50
+
+          issueOrders:
+            headline: Issues
+            type: pages
+            parent: site.find("orders")
+            status: unlisted
+            create: false
+            templates:
+              - order
+            limit: 50
+
+  settings:
+    label: Settings
+    icon: cog
+
+    sections:
+      settingsFields:
+        type: fields
+        fields:
+        
+          newsletter:
+            width: 2/3
+            label: Newsletter
+            type: structure
+            disabled: true
+            fields:
+              date:
+                label: Date
+                type: date
+              value:
+                label: Address
+                type: text
+
+          stripeEnabled:
+            width: 1/3
+            label: Stripe Enabled
+            type: toggle
+            text:
+              - "no"
+              - "yes"
+            default: "no"
+
+

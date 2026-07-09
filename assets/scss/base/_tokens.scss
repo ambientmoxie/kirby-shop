@@ -1,0 +1,25 @@
+// Design tokens only — nothing but custom properties.
+:root {
+  // Typefaces
+  --ff-sans: "HN", Helvetica, Arial, sans-serif;
+  --ff-mono: "Nitti", "Courier New", Courier, monospace;
+
+  // Font sizes
+  --fs-sm: 1.3rem;
+  --fs-rg: 1.5rem;
+  --fs-md: 2.8rem;
+  --fs-lg: 6.4rem;
+
+  // Shades
+  --white: #fff;
+  --gray: #ececec;
+  --black: #262626;
+
+  // Roles
+  --color-txt: var(--black);
+  --color-bg: var(--white);
+  --color-error: #c0392b;
+
+  // Spacing
+  --site-padding: 2rem;
+}

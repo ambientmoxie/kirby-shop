@@ -1,0 +1,75 @@
+title: Product
+icon: cart
+
+columns:
+
+  # LEFT (2/3) — Content
+  content:
+    width: 2/3
+    sections:
+
+      description:
+        headline: Description
+        type: fields
+        fields:
+          shortDescription:
+            label: Short description
+            type: text
+
+      images:
+        headline: Images
+        type: fields
+        fields:
+          productImage:
+            label: Product image
+            type: files
+            max: 1
+            multiple: false
+            uploads: image
+            image:
+              cover: true
+
+          hoverImage:
+            label: Image on hover
+            type: files
+            max: 1
+            multiple: false
+            uploads: image
+            image:
+              cover: true
+
+  # RIGHT (1/3) — Commerce
+  commerce:
+    width: 1/3
+    sections:
+
+      pricing:
+        headline: Commerce
+        type: fields
+        fields:
+
+          isNew:
+            label: New
+            type: toggle
+            text:
+              - "no"
+              - "yes"
+            default: false
+
+          color:
+            label: Color
+            type: text
+
+          price:
+            label: Price
+            type: number
+            step: 0.01
+            min: 0
+            required: true
+
+          stock:
+            label: Stock
+            type: number
+            step: 1
+            min: 0
+            required: true

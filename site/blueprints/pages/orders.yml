@@ -1,0 +1,28 @@
+title: orders
+create: false
+
+columns:
+  pendingOrder:
+    width: 2/3
+    sections:
+      pendingOrder:
+        type: pages
+        label: Pending
+        parent: site.index.findBy("intendedTemplate", "orders")
+        status: draft
+  treatedOrder:
+    width: 1/3
+    sections:
+      completeOrder:
+        type: pages
+        label: Complete
+        parent: site.index.findBy("intendedTemplate", "orders")
+        status: listed
+      errorOrder:
+        type: pages
+        label: Issue
+        parent: site.index.findBy("intendedTemplate", "orders")
+        status: unlisted
+
+
+    

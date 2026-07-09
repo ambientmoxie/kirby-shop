@@ -1,0 +1,87 @@
+# Build directory
+# ------------
+build/
+
+# System files
+# ------------
+
+Icon
+.DS_Store
+
+# Temporary files
+# ---------------
+
+public/media/*
+!/media/index.html
+
+# Lock files
+# ---------------
+
+.lock
+
+# Editors
+# (sensitive workspace files)
+# ---------------------------
+*.sublime-workspace
+/.vscode
+/.idea
+
+# Vite generated folder
+# ----------------------
+
+/assets/build
+
+# Node modules
+# ----------------------
+
+node_modules
+
+# Fonts
+# ----------------------
+
+/public/assets/fonts/
+
+# Miscellaneous
+# ----------------------
+
+*.zip
+*.rar
+*.psd
+*.indd
+*.ai
+.env
+.claude
+
+# Kirby core directory
+# ----------------------
+
+/kirby
+/vendor
+
+# -------------SECURITY-------------
+# NEVER publish these files via Git!
+# -------------SECURITY-------------
+
+# Cache Files
+# ---------------
+
+/site/cache/*
+!/site/cache/index.html
+/.parcel-cache/
+
+# Accounts
+# ---------------
+
+/site/accounts/*
+!/site/accounts/index.html
+
+# Sessions
+# ---------------
+
+/site/sessions/*
+!/site/sessions/index.html
+
+# License
+# ---------------
+
+/site/config/.license

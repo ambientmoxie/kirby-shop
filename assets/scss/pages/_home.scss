@@ -1,0 +1,72 @@
+@use "../abstracts" as *;
+
+.product-list {
+
+  &__title {
+    margin-bottom: 2rem;
+  }
+
+  // Flickity positions cells absolutely inside its own viewport, so this is a
+  // plain row rather than a grid. `display: flex` keeps the cells laid out
+  // side by side before Flickity initialises, which avoids a vertical flash.
+  &__products {
+    display: flex;
+    overflow: hidden;
+
+    .flickity-viewport {
+      width: 100%;
+    }
+
+    // 5 visible slides. The gutter comes from padding, since Flickity absolutely
+    // positions the cells and so ignores `gap`. `background-clip` keeps the card's
+    // background off that padding, which is what makes the gutter visible.
+    // `flex: 0 0 auto` only matters before Flickity initialises, when the cells
+    // are still flex items.
+    .product {
+      flex: 0 0 auto;
+      width: 20%;
+      padding-right: 0.2rem;
+      background-clip: content-box;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    margin: 1rem;
+  }
+
+  &__arrow {
+    @include btn(tertiary);
+    cursor: pointer;
+
+    &[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      // the `btn` mixin sets a hover border; a disabled button shouldn't react
+      &:hover {
+        border-color: var(--gray);
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .product-list__products .product {
+    width: 33.3333%;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-list__products .product {
+    width: 50%;
+  }
+}
+
+@media (max-width: 460px) {
+  .product-list__products .product {
+    width: 100%;
+  }
+}

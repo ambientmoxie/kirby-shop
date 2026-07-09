@@ -1,0 +1,33 @@
+Title: Paul Smith
+
+----
+
+Shortdescription: Black knee-high boots with arched sole
+
+----
+
+Productimage:
+
+- file://ms5pakd6a4goeh92
+
+----
+
+Hoverimage:
+
+- file://klolyvzqu8xlnuke
+
+----
+
+Color: Navy
+
+----
+
+Price: 1600
+
+----
+
+Stock: 10
+
+----
+
+Uuid: 2lrw7ajyaj5xjrw5

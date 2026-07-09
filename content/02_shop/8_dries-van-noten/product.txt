@@ -1,0 +1,33 @@
+Title: Dries Van Noten
+
+----
+
+Shortdescription: Red narrow wool scarf
+
+----
+
+Productimage:
+
+- file://0tp6iawztlhtduis
+
+----
+
+Hoverimage:
+
+- file://p0t8wifnkmy6h5yr
+
+----
+
+Color: Bottle Green
+
+----
+
+Price: 2400
+
+----
+
+Stock: 10
+
+----
+
+Uuid: dtzoud39hvlxo854

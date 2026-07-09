@@ -1,0 +1,56 @@
+@use "../abstracts" as *;
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 7rem auto;
+  gap: 1.5rem;
+
+  &__image {
+    background: var(--gray);
+    align-self: start;
+
+    .picture {
+      display: block;
+    }
+
+    // `picture.php` prints width/height attributes; without `height: auto` the
+    // height attribute wins and the image stretches to its intrinsic height.
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: brightness(0);
+    }
+  }
+
+  &__meta > *:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  &__name {
+    font-size: var(--fs-rg);
+    font-weight: 600;
+  }
+
+  &__color {
+    opacity: 0.6;
+  }
+
+  &__price {
+    font-family: var(--ff-mono);
+  }
+
+  &__actions {
+    display: flex;
+
+    button {
+      @include btn(tertiary);
+    }
+
+    button:not(:last-child)::after {
+      content: "|";
+      margin: 0 0.5rem;
+      opacity: 0.4;
+    }
+  }
+}
