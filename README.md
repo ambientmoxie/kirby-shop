@@ -95,11 +95,10 @@ site/
 
 ## Build your application
 
-Remove `VITE_DEV` from your `.env`, then:
+Remove `VITE_DEV` from your `.env`, then run `npm run preview` to compile the JS and SCSS files into public/build/ and start the local preview server.
 
 ```bash
-npm run build   # compiles JS and SCSS into public/build/
-npm run preview # local preview
+npm run preview # compiles JS and SCSS into public/build/, then starts local preview
 ```
 
 Deploy manually, via FTP, SSH, or your preferred method.
