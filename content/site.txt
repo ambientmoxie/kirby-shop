@@ -2,20 +2,4 @@ Title: Store
 
 ----
 
-Newsletter:
-
-- 
-  date: 2026-07-09
-  value: maxbond@gmail.com
-  id: "0"
-- 
-  date: 2026-07-09
-  value: dede@fdoiprjd.com
-  id: "1"
-- 
-  date: 2026-07-09
-  value: ojdeoioj@ddeoij.com
-
-----
-
 Stripeenabled: false
