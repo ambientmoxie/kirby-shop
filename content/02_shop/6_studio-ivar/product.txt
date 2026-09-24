@@ -1,0 +1,31 @@
+Title: Studio Ivar
+
+----
+
+Shortdescription: Low-top leather sneaker
+
+----
+
+Productimage:
+
+- file://w0crg5ael331sb2h
+
+----
+
+Isnew: true
+
+----
+
+Color: Off White
+
+----
+
+Price: 1150
+
+----
+
+Stock: 10
+
+----
+
+Uuid: e2qinr5gcswsvo56

@@ -1,0 +1,29 @@
+Title: Maison Vero
+
+----
+
+Shortdescription: Polished leather loafer
+
+----
+
+Productimage: - file://c5qi86rdt068daad
+
+----
+
+Isnew: true
+
+----
+
+Color: Oxblood
+
+----
+
+Price: 1345
+
+----
+
+Stock: 8
+
+----
+
+Uuid: a30o08psh8jo735n

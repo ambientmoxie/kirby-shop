@@ -1,0 +1,43 @@
+@use "../abstracts/mixins" as *;
+
+:root {
+  // Colors
+  --color-bg: #0a0a0a;
+  --color-surface: #151515; // cards and form fields
+  --color-text: #fafafa;
+  --color-muted: #999999;
+  --color-border: #3a3a3a;
+  --color-button: #696969;
+  --color-error: #e5484d;
+
+  // Fonts
+  --font-sans: "ABCFavorit", sans-serif;
+  --font-mono: "Nitti", monospace;
+
+  // Font sizes (1rem = 10px)
+  --fs-small: 1.3rem;
+  --fs-base: 1.5rem;
+  --fs-medium: 1.8rem;
+  --fs-large: 2.4rem;
+  --fs-xlarge: 2.7rem;
+  --fs-xxlarge: 3rem;
+
+  // Spacing
+  --space-xs: 0.5rem;
+  --space-s: 1rem;
+  --space-m: 2rem;
+  --space-l: 4rem;
+  --space-xl: 15rem;
+
+  // Page side padding, shared by every section
+  --gutter: var(--space-l);
+
+  @include mobile {
+    --gutter: var(--space-m);
+  }
+
+  // Misc
+  --radius: 0.5rem;
+  --radius-pill: 50px;
+  --content-width: 100rem;
+}

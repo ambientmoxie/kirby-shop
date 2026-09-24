@@ -1,0 +1,53 @@
+@use "../abstracts/mixins" as *;
+
+.product {
+  width: 50rem;
+  aspect-ratio: 5 / 3.5;
+  padding: var(--space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  text-transform: uppercase;
+
+  &__badge,
+  &__price {
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+  }
+
+  &__name {
+    font-size: var(--fs-medium);
+  }
+
+  &__description {
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+  }
+
+  // Takes the space left between the text and the footer; min-height: 0 lets it shrink
+  &__image {
+    flex: 1;
+    min-height: 0;
+    padding: var(--space-m);
+
+    .picture__img {
+      @include fit-image(contain);
+    }
+  }
+
+  &__button {
+    @include pill-button;
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    margin-top: var(--space-s);
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

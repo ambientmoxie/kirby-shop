@@ -1,0 +1,15 @@
+@use "../abstracts/mixins" as *;
+
+.faq {
+  padding: var(--space-xl) var(--gutter);
+
+  &__title {
+    @include section-title;
+  }
+
+  &__title,
+  &__dropdown {
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+}

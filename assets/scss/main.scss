@@ -1,0 +1,25 @@
+// Base: fonts, design tokens, reset, global element styles
+@use "base/fonts";
+@use "base/tokens";
+@use "base/reset";
+@use "base/global";
+
+// Layout: shared across every page
+@use "layout/header";
+@use "layout/footer";
+
+// Sections: page sections (home)
+@use "sections/hero";
+@use "sections/product-list";
+@use "sections/faq";
+
+// Components: reusable blocks
+@use "components/product";
+@use "components/dropdown";
+@use "components/newsletter";
+@use "components/cart-drawer";
+@use "components/cart-item";
+
+// Pages: page-specific layouts
+@use "pages/checkout";
+@use "pages/success";

@@ -1,0 +1,37 @@
+@use "../abstracts/mixins" as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  padding: var(--space-m) var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+
+  // Logo left, bag right
+  @include mobile {
+    @include flex-between;
+  }
+
+  &__catchphrase {
+    justify-self: start;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__logo {
+    justify-self: center;
+  }
+
+  &__bag-button {
+    justify-self: end;
+    text-transform: uppercase; // buttons don't inherit it
+  }
+}

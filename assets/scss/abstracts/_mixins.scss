@@ -1,0 +1,52 @@
+// Phones and small tablets
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+// Row with items pushed to both ends
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Uppercase heading used at the top of home sections
+@mixin section-title {
+  font-size: var(--fs-large);
+  text-transform: uppercase;
+}
+
+// Boxed form control (newsletter, checkout)
+@mixin field {
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+}
+
+// Filled rounded button (add to cart, cart checkout, success page)
+@mixin pill-button {
+  padding: 1rem 1.5rem;
+  background-color: var(--color-button);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+}
+
+// Button that reads as plain text (drawer close, cart item actions)
+@mixin text-button {
+  text-transform: capitalize;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+// Image filling its container ($fit: cover crops, contain letterboxes)
+@mixin fit-image($fit: cover) {
+  width: 100%;
+  height: 100%;
+  object-fit: $fit;
+}

@@ -1,0 +1,41 @@
+@use "../abstracts/mixins" as *;
+
+.newsletter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  // Title above the form instead of beside it
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+  }
+
+  &__title {
+    font-size: var(--fs-xxlarge);
+
+    @include mobile {
+      font-size: var(--fs-large);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-s);
+  }
+
+  &__input,
+  &__submit {
+    @include field;
+  }
+
+  &__honeypot {
+    display: none;
+  }
+}

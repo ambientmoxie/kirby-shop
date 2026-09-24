@@ -1,0 +1,6 @@
+title: Success
+icon: check
+options:
+  delete: false
+  changeSlug: false
+  changeTemplate: false

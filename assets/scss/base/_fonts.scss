@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "ABCFavorit";
+  src:
+    url("/assets/fonts/ABCFavorit-Regular.woff2") format("woff2"),
+    url("/assets/fonts/ABCFavorit-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nitti";
+  src:
+    url("/assets/fonts/Nitti-Normal.woff2") format("woff2"),
+    url("/assets/fonts/Nitti-Normal.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

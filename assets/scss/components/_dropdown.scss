@@ -1,0 +1,29 @@
+@use "../abstracts/mixins" as *;
+
+.dropdown-item {
+  border-bottom: 1px solid var(--color-text);
+
+  &__head {
+    @include flex-between;
+    gap: var(--space-m);
+    padding: var(--space-m) 0;
+    cursor: pointer;
+  }
+
+  // Caret points right; turned to point down, dropdown.js flips it up when open
+  &__toggle {
+    width: 0.6rem;
+    height: auto;
+    transform: rotate(90deg);
+  }
+
+  // dropdown.js animates height between 0 and the content height
+  &__body {
+    height: 0;
+    overflow: hidden;
+  }
+
+  &__body-inner {
+    padding-bottom: var(--space-m);
+  }
+}

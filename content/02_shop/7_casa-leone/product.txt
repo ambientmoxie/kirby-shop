@@ -1,0 +1,31 @@
+Title: Casa Leone
+
+----
+
+Shortdescription: Braided calfskin mule
+
+----
+
+Productimage:
+
+- file://8h94kufp1wp9nfe8
+
+----
+
+Isnew: true
+
+----
+
+Color: Tan
+
+----
+
+Price: 1620
+
+----
+
+Stock: 10
+
+----
+
+Uuid: 4eh7edonwqry96i3

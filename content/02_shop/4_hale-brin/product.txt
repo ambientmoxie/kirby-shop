@@ -1,0 +1,29 @@
+Title: Hale Brin
+
+----
+
+Shortdescription: Square toe Chelsea boot
+
+----
+
+Productimage: - file://6q73reo7ujg5d5og
+
+----
+
+Isnew: true
+
+----
+
+Color: Black
+
+----
+
+Price: 1890
+
+----
+
+Stock: 10
+
+----
+
+Uuid: kul9wiuyqru1u24q

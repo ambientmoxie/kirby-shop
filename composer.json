@@ -1,0 +1,35 @@
+{
+  "name": "ambientmoxie/kirby-shop",
+  "description": "Self-hosted e-commerce starter built on Kirby CMS with Stripe Checkout.",
+  "type": "project",
+  "license": "MIT",
+  "keywords": [
+    "kirby",
+    "cms",
+    "e-commerce",
+    "stripe",
+    "starterkit"
+  ],
+  "authors": [
+    {
+      "name": "ambientmoxie"
+    }
+  ],
+  "homepage": "https://github.com/ambientmoxie/kirby-shop",
+  "support": {
+    "issues": "https://github.com/ambientmoxie/kirby-shop/issues",
+    "source": "https://github.com/ambientmoxie/kirby-shop"
+  },
+  "require": {
+    "php": ">=8.2",
+    "getkirby/cms": "^5.0",
+    "vlucas/phpdotenv": "^5.6",
+    "stripe/stripe-php": "^21.3"
+  },
+  "config": {
+    "allow-plugins": {
+      "getkirby/composer-installer": true
+    },
+    "optimize-autoloader": true
+  }
+}

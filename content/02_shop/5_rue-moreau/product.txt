@@ -1,0 +1,31 @@
+Title: Rue Moreau
+
+----
+
+Shortdescription: Hand-sewn penny loafer
+
+----
+
+Productimage:
+
+- file://b0j0wq98gd996cm5
+
+----
+
+Isnew: true
+
+----
+
+Color: Chestnut
+
+----
+
+Price: 2750
+
+----
+
+Stock: 10
+
+----
+
+Uuid: beeyyq6gsui71qmh

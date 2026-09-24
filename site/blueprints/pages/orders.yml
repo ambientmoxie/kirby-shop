@@ -1,0 +1,28 @@
+title: Orders
+icon: draft
+create: false
+
+columns:
+  pending:
+    width: 2/3
+    sections:
+      pendingOrders:
+        headline: Pending
+        type: pages
+        status: draft
+        create: false
+
+  treated:
+    width: 1/3
+    sections:
+      completedOrders:
+        headline: Complete
+        type: pages
+        status: listed
+        create: false
+
+      issueOrders:
+        headline: Issue
+        type: pages
+        status: unlisted
+        create: false

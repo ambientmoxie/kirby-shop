@@ -1,0 +1,6 @@
+title: Checkout
+icon: cart
+options:
+  delete: false
+  changeSlug: false
+  changeTemplate: false

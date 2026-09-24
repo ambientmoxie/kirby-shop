@@ -1,0 +1,31 @@
+Title: Oskar Lind
+
+----
+
+Shortdescription: Suede derby, crepe sole
+
+----
+
+Productimage:
+
+- file://ktbgqs96o9he260k
+
+----
+
+Isnew: true
+
+----
+
+Color: Dark Blue
+
+----
+
+Price: 2480
+
+----
+
+Stock: 10
+
+----
+
+Uuid: bk5plrxr7jliaos6

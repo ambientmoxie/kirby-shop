@@ -1,0 +1,31 @@
+Title: Elio Marsh
+
+----
+
+Shortdescription: Waxed suede hiking boot
+
+----
+
+Productimage:
+
+- file://ru40uq9jlt98v8a6
+
+----
+
+Isnew: true
+
+----
+
+Color: Charcoal
+
+----
+
+Price: 3480
+
+----
+
+Stock: 10
+
+----
+
+Uuid: ld5u9xomi9pym94n

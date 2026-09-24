@@ -1,0 +1,16 @@
+title: Home
+icon: home
+options:
+  delete: false
+  duplicate: false
+  changeSlug: false
+  changeStatus: false
+  changeTemplate: false
+  changeTitle: false
+
+sections:
+  info:
+    type: info
+    text: |
+      The home page is built from snippets in `site/snippets/sections` (hero, product list, FAQ).
+      Products are managed in the Store tab.

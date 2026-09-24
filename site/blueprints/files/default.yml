@@ -1,0 +1,12 @@
+title: files
+
+sections:
+  data:
+    type: fields
+    fields:
+      alt:
+        label: Alt description
+        type: text
+      caption:
+        label: Caption
+        type: text

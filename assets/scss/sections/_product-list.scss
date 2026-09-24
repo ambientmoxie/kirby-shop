@@ -1,0 +1,38 @@
+@use "../abstracts/mixins" as *;
+
+.product-list {
+  &__header {
+    @include flex-between;
+    padding: var(--gutter);
+  }
+
+  &__title {
+    @include section-title;
+  }
+
+  &__nav {
+    display: flex;
+    gap: var(--space-m);
+  }
+
+  &__arrow {
+    &--prev {
+      transform: scaleX(-1);
+    }
+
+    // carousel.js disables the buttons at both ends of the list
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  &__products {
+    margin-left: var(--gutter);
+
+    // Flickity positions cells absolutely, so spacing has to be a margin
+    .product {
+      margin-right: var(--space-m);
+    }
+  }
+}

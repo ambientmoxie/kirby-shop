@@ -1,0 +1,45 @@
+@use "../abstracts/mixins" as *;
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1.5rem;
+
+  &__image {
+    align-self: start;
+
+    // picture.php prints width/height attributes; height: auto keeps the ratio
+    .picture__img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  &__name {
+    text-transform: uppercase;
+  }
+
+  &__color {
+    color: var(--color-muted);
+  }
+
+  &__price {
+    font-family: var(--font-mono);
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-s);
+    font-size: var(--fs-small);
+  }
+
+  &__action {
+    @include text-button;
+  }
+}

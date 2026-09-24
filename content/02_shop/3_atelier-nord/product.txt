@@ -1,0 +1,29 @@
+Title: Atelier Nord
+
+----
+
+Shortdescription: Lined nubuck chukka boot
+
+----
+
+Productimage: - file://7hofv76jodl7fsxd
+
+----
+
+Isnew: true
+
+----
+
+Color: Sand
+
+----
+
+Price: 3120
+
+----
+
+Stock: 10
+
+----
+
+Uuid: 7rf29w0yukvcx3y4

@@ -1,0 +1,38 @@
+@use "../abstracts/mixins" as *;
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 90svh;
+  padding: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__cover {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    .picture__img {
+      @include fit-image(cover);
+      opacity: 0.1;
+    }
+  }
+
+  &__title {
+    position: relative;
+    z-index: 2;
+    max-width: var(--content-width);
+    font-size: var(--fs-xlarge);
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  &__link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+}
