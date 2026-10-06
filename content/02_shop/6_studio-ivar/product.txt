@@ -6,9 +6,7 @@ Shortdescription: Low-top leather sneaker
 
 ----
 
-Productimage:
-
-- file://w0crg5ael331sb2h
+Productimage: - file://w0crg5ael331sb2h
 
 ----
 
@@ -24,7 +22,7 @@ Price: 1150
 
 ----
 
-Stock: 10
+Stock: 9
 
 ----
 

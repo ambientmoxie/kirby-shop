@@ -1,7 +1,83 @@
 <?php
 
 use Kirby\Data\Yaml;
+use Kirby\Filesystem\Dir;
 use Kirby\Toolkit\Str;
+
+// Immutable internal identifier of an order (UUID v4). It is also the order page's
+// slug, so an order is found directly by its id, and it is what external systems
+// (Stripe metadata) refer to. Never derived from the number of existing orders.
+function newOrderId(): string
+{
+    return Str::uuid();
+}
+
+function findOrder(string $orderId): ?Kirby\Cms\Page
+{
+    return $orderId !== '' ? page('orders')?->findPageOrDraft($orderId) : null;
+}
+
+// Human-facing order number, e.g. "KS-2026-000128". For display only: orders are
+// identified by their orderId.
+//
+// Concurrency: the last number lives in a counter file that is read, incremented and
+// written while holding an exclusive flock(), so two orders finalised at the same
+// moment are serialised and can never receive the same number.
+//
+// If the counter file is missing (first run, lost during a deploy) it is seeded from
+// the highest number among existing orders, so numbering continues without reusing
+// a number. A counter that exists but can't be read stops the order instead of
+// silently restarting the sequence.
+function nextOrderNumber(): string
+{
+    $file = kirby()->root('site') . '/storage/order-counter';
+    Dir::make(dirname($file));
+
+    $isNew  = !is_file($file);
+    $handle = fopen($file, 'c+');
+    if ($handle === false || !flock($handle, LOCK_EX)) {
+        throw new Exception('Order counter could not be opened or locked.');
+    }
+
+    try {
+        $current = trim((string)stream_get_contents($handle));
+
+        if ($current === '' && $isNew) {
+            $last = highestOrderNumber();
+        } elseif (ctype_digit($current)) {
+            $last = (int)$current;
+        } else {
+            throw new Exception("Order counter is unreadable ({$file}).");
+        }
+
+        $next = $last + 1;
+
+        rewind($handle);
+        ftruncate($handle, 0);
+        if (fwrite($handle, (string)$next) === false || !fflush($handle)) {
+            throw new Exception('Order counter could not be written.');
+        }
+    } finally {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+    }
+
+    return sprintf('%s-%s-%06d', option('kstore.orderPrefix', 'KS'), date('Y'), $next);
+}
+
+// Highest sequence among existing orders: the trailing digits of their orderNumber,
+// or of the title for orders created before orderNumber existed ("#0042 - ...").
+function highestOrderNumber(): int
+{
+    $highest = 0;
+    foreach (page('orders')?->childrenAndDrafts() ?? [] as $order) {
+        $source = $order->orderNumber()->or($order->title())->value();
+        if (preg_match('/(\d+)(?!.*\d)/', explode(' - ', $source)[0], $m)) {
+            $highest = max($highest, (int)$m[1]);
+        }
+    }
+    return $highest;
+}
 
 function isStripeEnabled(): bool
 {
@@ -46,7 +122,7 @@ function sendOrderEmails(array $buyerInfo, array $items, float $total, string $o
             'from'     => $fromAddress,
             'replyTo'  => $toUser !== '' ? $toUser : null,
             'to'       => $fromAddress,
-            'subject'  => "New order received (#{$orderNumber})",
+            'subject'  => "New order received ({$orderNumber})",
             'data'     => $data,
         ]);
 
@@ -55,7 +131,7 @@ function sendOrderEmails(array $buyerInfo, array $items, float $total, string $o
                 'template' => 'checkout/receipt',
                 'from'     => $fromAddress,
                 'to'       => [$toUser => $toName !== '' ? $toName : $toUser],
-                'subject'  => "Order confirmation (#{$orderNumber})",
+                'subject'  => "Order confirmation ({$orderNumber})",
                 'data'     => $data,
             ]);
         } else {
@@ -72,9 +148,6 @@ function finalizeOrder(array $cart, array $buyerInfo, $session): string
     if (!$ordersPage) {
         throw new Exception('Orders page not found.');
     }
-
-    $existingOrders = $ordersPage->childrenAndDrafts()->count();
-    $orderNumber    = str_pad((string)($existingOrders + 1), 4, '0', STR_PAD_LEFT);
 
     $itemsData  = [];
     $emailItems = [];
@@ -110,7 +183,9 @@ function finalizeOrder(array $cart, array $buyerInfo, $session): string
 
     $capitalizedName    = ucwords(strtolower((string)($buyerInfo['name'] ?? '')));
     $capitalizedSurname = ucwords(strtolower((string)($buyerInfo['surname'] ?? '')));
-    $slug = Str::slug($orderNumber . '-' . ($buyerInfo['name'] ?? '') . '-' . ($buyerInfo['surname'] ?? '') . '-' . substr(uniqid(), -5));
+
+    $orderId     = newOrderId();
+    $orderNumber = nextOrderNumber();
 
     kirby()->impersonate('kirby');
 
@@ -129,11 +204,13 @@ function finalizeOrder(array $cart, array $buyerInfo, $session): string
     }
 
     $ordersPage->createChild([
-        'slug'     => $slug,
+        'slug'     => $orderId,
         'template' => 'order',
         'isDraft'  => true,
         'content'  => [
-            'title'                  => "#{$orderNumber} - {$capitalizedName} {$capitalizedSurname}",
+            'title'                  => "{$orderNumber} - {$capitalizedName} {$capitalizedSurname}",
+            'orderId'                => $orderId,
+            'orderNumber'            => $orderNumber,
             'items'                  => Yaml::encode($itemsData),
             'name'                   => (string)($buyerInfo['name'] ?? ''),
             'surname'                => (string)($buyerInfo['surname'] ?? ''),

@@ -15,7 +15,7 @@ $fullName = trim(($name ?? '') . ' ' . ($surname ?? ''));
 $items = is_array($items ?? null) ? $items : [];
 $total = (float)($total ?? 0);
 
-$orderLabel = !empty($orderNumber) ? ('Order #' . esc($orderNumber)) : 'New order';
+$orderLabel = !empty($orderNumber) ? ('Order ' . esc($orderNumber)) : 'New order';
 ?>
 <!doctype html>
 <html lang="en">

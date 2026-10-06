@@ -14,6 +14,16 @@ tabs:
       orderDetails:
         type: fields
         fields:
+          orderNumber:
+            label: Order number
+            type: text
+            disabled: true
+            width: 1/2
+          orderId:
+            label: Internal ID
+            type: text
+            disabled: true
+            width: 1/2
           items:
             label: Items
             type: structure

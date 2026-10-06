@@ -82,6 +82,11 @@ CLAUDE.local.md
 /site/sessions/*
 !/site/sessions/index.html
 
+# Runtime data (order number counter)
+# ---------------
+
+/site/storage/
+
 # License
 # ---------------
 

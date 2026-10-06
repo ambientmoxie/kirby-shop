@@ -3,7 +3,7 @@ $fullName = trim(($name ?? '') . ' ' . ($surname ?? ''));
 $items = is_array($items ?? null) ? $items : [];
 $total = (float)($total ?? 0);
 
-$orderLabel = !empty($orderNumber ?? null) ? ('Order #' . $orderNumber) : 'Your order';
+$orderLabel = !empty($orderNumber ?? null) ? ('Order ' . $orderNumber) : 'Your order';
 ?>
 <?= $orderLabel ?> confirmed
 

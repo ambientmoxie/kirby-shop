@@ -10,7 +10,7 @@ $items = is_array($items ?? null) ? $items : [];
 $total = (float)($total ?? 0);
 
 $greeting = $fullName !== '' ? esc($fullName) : 'there';
-$orderLabel = !empty($orderNumber) ? ('Order #' . esc($orderNumber)) : 'Your order';
+$orderLabel = !empty($orderNumber) ? ('Order ' . esc($orderNumber)) : 'Your order';
 ?>
 <!doctype html>
 <html lang="en">

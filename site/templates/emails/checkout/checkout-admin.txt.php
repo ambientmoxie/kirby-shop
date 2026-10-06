@@ -12,7 +12,7 @@ $message  = trim($message ?? '');
 $items = is_array($items ?? null) ? $items : [];
 $total = (float)($total ?? 0);
 
-$orderLabel = !empty($orderNumber ?? null) ? ('Order #' . $orderNumber) : 'New order';
+$orderLabel = !empty($orderNumber ?? null) ? ('Order ' . $orderNumber) : 'New order';
 ?>
 <?= $orderLabel ?>
 
