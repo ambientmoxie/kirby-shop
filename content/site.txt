@@ -6,4 +6,4 @@ Newsletter:
 
 ----
 
-Stripeenabled: true
+Stripeenabled: false
