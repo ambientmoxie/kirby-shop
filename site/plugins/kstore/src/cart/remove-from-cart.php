@@ -6,7 +6,7 @@ function removeFromCart()
 {
     $data  = json_decode(file_get_contents('php://input'), true) ?? [];
     $cart  = cartSessionItems();
-    $index = cartLineIndex($cart, (string)($data['id'] ?? ''), (string)($data['color'] ?? ''));
+    $index = cartLineIndex($cart, (string)($data['id'] ?? ''));
 
     if ($index !== null) {
         array_splice($cart, $index, 1);

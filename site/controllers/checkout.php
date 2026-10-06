@@ -40,9 +40,18 @@ return function ($page, $site, $kirby) {
             $error = 'Invalid email format.';
         }
 
-        $cart = $session->get('cart', []);
-        if (!$error && (empty($cart) || !is_array($cart))) {
-            $error = 'Your cart is empty.';
+        // Rebuild every line from Kirby: current price, title and stock. Nothing commercial
+        // is taken from the request or from values stored earlier in the session.
+        $lines = [];
+        if (!$error) {
+            $checkout = checkoutLines();
+            $lines    = $checkout['lines'];
+
+            if ($checkout['problems']) {
+                $error = implode(' ', $checkout['problems']) . ' Please review your order.';
+            } elseif (empty($lines)) {
+                $error = 'Your cart is empty.';
+            }
         }
 
         if ($error) {
@@ -67,7 +76,7 @@ return function ($page, $site, $kirby) {
 
         if (!isStripeEnabled()) {
             try {
-                finalizeOrder($cart, $buyerInfo, $session);
+                finalizeOrder($lines, $buyerInfo, $session);
                 $session->set('checkout_token', true);
                 go($site->find('success')->url());
             } catch (Throwable $e) {
@@ -77,42 +86,18 @@ return function ($page, $site, $kirby) {
             }
         }
 
-        // Stripe path: drop lines that are gone or no longer in stock
-        foreach ($cart as $index => $item) {
-            $uuid = $item['id'] ?? null;
-            if (!$uuid) { unset($cart[$index]); continue; }
-
-            $productPage = $kirby->page('page://' . $uuid);
-            if (!$productPage) { unset($cart[$index]); continue; }
-
-            $requestedQty = (int)($item['quantity'] ?? 0);
-            $available    = (int)$productPage->stock()->int();
-
-            if ($requestedQty < 1 || $available < $requestedQty) {
-                unset($cart[$index]);
-            }
-        }
-
-        $cart = array_values($cart);
-        $session->set('cart', $cart);
-
-        if (empty($cart)) {
-            $session->set('checkout_error', 'Some products were unavailable and have been removed. Your cart is now empty.');
-            go($page->url());
-        }
-
         try {
             $session->set('checkout_token', bin2hex(random_bytes(16)));
 
             \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
 
             $line_items = [];
-            foreach ($cart as $item) {
-                $title        = (string)($item['title'] ?? 'Product');
-                $color        = (string)($item['color'] ?? '');
-                $qty          = max(1, (int)($item['quantity'] ?? 1));
-                $unit_amount  = (int)round((float)($item['price'] ?? 0) * 100);
-                $thumb        = (string)($item['thumb'] ?? '');
+            foreach ($lines as $line) {
+                $title        = $line['title'];
+                $color        = $line['color'];
+                $qty          = $line['quantity'];
+                $unit_amount  = (int)round($line['price'] * 100);
+                $thumb        = $line['thumb'];
 
                 $displayName  = $color !== '' ? "{$title} — {$color}" : $title;
                 $product_data = ['name' => $displayName];
@@ -140,7 +125,10 @@ return function ($page, $site, $kirby) {
                 'cancel_url'           => $page->url(),
             ]);
 
+            // Snapshot of exactly what Stripe will charge: the order is recorded from this,
+            // not from the live cart, so a price edited during payment can't skew it
             $session->set('stripe_session_id', $stripeSession->id);
+            $session->set('checkout_lines', $lines);
             go($stripeSession->url);
         } catch (Throwable $e) {
             error_log('[checkout] Stripe session failed: ' . $e->getMessage());

@@ -6,11 +6,10 @@ function updateCartItem()
 {
     $data     = json_decode(file_get_contents('php://input'), true) ?? [];
     $id       = (string)($data['id'] ?? '');
-    $color    = (string)($data['color'] ?? '');
     $quantity = (int)($data['quantity'] ?? 1);
 
     $cart  = cartSessionItems();
-    $index = cartLineIndex($cart, $id, $color);
+    $index = cartLineIndex($cart, $id);
 
     if ($index === null) {
         return Response::json(['error' => true, 'message' => 'Item not found in cart'], 404);

@@ -51,6 +51,7 @@ node_modules
 *.ai
 .env
 .claude
+.CLAUDE.local.md
 
 # Kirby core directory
 # ----------------------

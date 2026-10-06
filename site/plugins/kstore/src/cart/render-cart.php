@@ -4,25 +4,20 @@ use Kirby\Http\Response;
 
 function renderCartItemsMarkup(): string
 {
-    $items = cartSessionItems();
+    $lines = cartLines();
 
-    if (empty($items)) {
+    if (empty($lines)) {
         return '<p class="cart-drawer__empty">Your cart is empty.</p>';
     }
 
+    // Lines carry the product's current colour and price
     $html = '';
-    foreach ($items as $item) {
-        $product = cartProduct((string)($item['id'] ?? ''));
-        if (!$product) continue;
-
-        // Colour and price come from the stored line, not the page: the line is
-        // keyed on id + colour, so rendering the page's current values would
-        // break update/remove whenever a product is edited after being added.
+    foreach ($lines as $line) {
         $html .= snippet('components/cart-item', [
-            'product'  => $product,
-            'quantity' => (int)($item['quantity'] ?? 1),
-            'color'    => (string)($item['color'] ?? ''),
-            'price'    => (float)($item['price'] ?? 0),
+            'product'  => $line['product'],
+            'quantity' => $line['quantity'],
+            'color'    => $line['color'],
+            'price'    => $line['price'],
         ], true);
     }
 

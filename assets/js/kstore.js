@@ -25,12 +25,11 @@ export default class KStore {
 
       const item = btn.closest("[data-cart-item]");
       const id = item.dataset.cartItem;
-      const color = item.dataset.cartColor ?? "";
       const quantity = parseInt(item.querySelector("[data-cart-qty]")?.dataset.cartQty ?? "1", 10);
       const action = btn.dataset.cartAction;
 
-      if (action === "remove") this.remove(id, color);
-      else this.update(id, color, quantity + (action === "increase" ? 1 : -1));
+      if (action === "remove") this.remove(id);
+      else this.update(id, quantity + (action === "increase" ? 1 : -1));
     });
   }
 
@@ -59,13 +58,13 @@ export default class KStore {
     await this.refresh();
   }
 
-  async update(id, color, quantity) {
-    await this.#post("/kstore/cart/update", { id, color, quantity });
+  async update(id, quantity) {
+    await this.#post("/kstore/cart/update", { id, quantity });
     await this.refresh();
   }
 
-  async remove(id, color) {
-    await this.#post("/kstore/cart/remove", { id, color });
+  async remove(id) {
+    await this.#post("/kstore/cart/remove", { id });
     await this.refresh();
   }
 }

@@ -8,10 +8,10 @@ function addToCart()
     $id       = (string)($data['id'] ?? '');
     $quantity = max(1, (int)($data['quantity'] ?? 1));
 
-    // Everything except the id and quantity comes from the product page, never from
-    // the request: a price sent by the browser could be edited before checkout.
+    // Only the id and quantity are kept: everything else is read from the product
+    // page whenever the cart is shown or checked out (see cartLines/checkoutLines).
     $product = cartProduct($id);
-    if (!$product) {
+    if (!isPurchasable($product)) {
         return Response::json(['error' => true, 'message' => 'Product not found'], 404);
     }
 
@@ -20,17 +20,12 @@ function addToCart()
         return Response::json(['error' => true, 'message' => 'No more stock available for this item'], 409);
     }
 
-    $color = (string)$product->color()->value();
-    $cart  = cartSessionItems();
-    $index = cartLineIndex($cart, $id, $color);
-    $inCart = $index === null ? 0 : (int)$cart[$index]['quantity'];
+    $cart   = cartSessionItems();
+    $index  = cartLineIndex($cart, $id);
+    $inCart = $index === null ? 0 : $cart[$index]['quantity'];
 
     $line = [
         'id'       => $id,
-        'color'    => $color,
-        'title'    => $product->title()->value(),
-        'price'    => $product->price()->toFloat(),
-        'thumb'    => $product->productImage()->toFile()?->resize(100)->url() ?? '',
         'quantity' => min($inCart + $quantity, $stock),
     ];
 

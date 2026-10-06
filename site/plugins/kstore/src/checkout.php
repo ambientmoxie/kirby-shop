@@ -152,6 +152,7 @@ function finalizeOrder(array $cart, array $buyerInfo, $session): string
     $session->remove('buyerInfo');
     $session->remove('checkout_token');
     $session->remove('stripe_session_id');
+    $session->remove('checkout_lines');
 
     return $orderNumber;
 }
@@ -162,11 +163,11 @@ function finalizeOrder(array $cart, array $buyerInfo, $session): string
 function finalizeFromStripe(?string $stripeSessionId): array
 {
     $session   = kirby()->session();
-    $cart      = $session->get('cart', []);
+    $lines     = $session->get('checkout_lines', []);
     $buyerInfo = $session->get('buyerInfo', []);
 
     if (
-        !$session->get('checkout_token') || empty($cart) || empty($buyerInfo) ||
+        !$session->get('checkout_token') || empty($lines) || empty($buyerInfo) ||
         !$stripeSessionId || $stripeSessionId !== $session->get('stripe_session_id')
     ) {
         return ['status' => 'error', 'message' => 'Nothing to finalize.'];
@@ -180,7 +181,8 @@ function finalizeFromStripe(?string $stripeSessionId): array
         return ['status' => 'error', 'message' => 'Payment could not be verified.'];
     }
 
-    $expectedTotal = (int)round(cartSubtotal() * 100);
+    // Compared with the lines Stripe was asked to charge, not the live cart
+    $expectedTotal = (int)round(linesTotal($lines) * 100);
     if ($stripeSession->payment_status !== 'paid' || $stripeSession->amount_total !== $expectedTotal) {
         return ['status' => 'error', 'message' => 'Payment not completed.'];
     }
@@ -188,7 +190,7 @@ function finalizeFromStripe(?string $stripeSessionId): array
     $session->remove('checkout_token');
 
     try {
-        $orderNumber = finalizeOrder($cart, $buyerInfo, $session);
+        $orderNumber = finalizeOrder($lines, $buyerInfo, $session);
         return ['status' => 'success', 'orderNumber' => $orderNumber];
     } catch (Throwable $e) {
         error_log('[finalize] Error: ' . $e->getMessage());

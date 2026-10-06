@@ -3,7 +3,6 @@ $product  ??= null;
 $quantity ??= 1;
 if (!$product) return;
 
-// Fall back to the page only when the caller has no stored line to pass
 $color ??= $product->color()->value() ?? '';
 $price ??= $product->price()->toFloat();
 
@@ -12,8 +11,7 @@ $cover = $product->productImage()->toFile();
 
 <article
     class="cart-item"
-    data-cart-item="<?= esc($product->uuid()->id()) ?>"
-    data-cart-color="<?= esc($color) ?>">
+    data-cart-item="<?= esc($product->uuid()->id()) ?>">
 
     <?php if ($cover): ?>
         <div class="cart-item__image">
