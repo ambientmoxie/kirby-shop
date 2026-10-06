@@ -2,8 +2,8 @@ Title: Store
 
 ----
 
-Newsletter:
+Newsletter: 
 
 ----
 
-Stripeenabled: false
+Stripeenabled: true

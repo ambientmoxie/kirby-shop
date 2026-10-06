@@ -72,23 +72,41 @@ return function ($page, $site, $kirby) {
             'additionalInformations' => $message,
         ];
 
-        $session->set('buyerInfo', $buyerInfo);
+        // The order is saved before any payment, with the lines above as its snapshot:
+        // whatever happens next (payment, browser closed, failure) there is a record of it
+        try {
+            $order = createPendingOrder($lines, $buyerInfo, isStripeEnabled() ? 'stripe' : 'offline');
+        } catch (Throwable $e) {
+            error_log('[checkout] Pending order could not be created: ' . $e->getMessage());
+            $session->set('checkout_error', 'Something went wrong. Please try again.');
+            go($page->url());
+        }
 
+        $orderId = $order->orderId()->value();
+        $session->set('pending_order_id', $orderId);
+
+        // No Stripe: the vendor collects payment, so the order is confirmed right away.
+        // Once confirmed, any later problem (stock, email) is for the admin to resolve
+        // from the Panel; the customer has placed their order either way.
         if (!isStripeEnabled()) {
             try {
-                finalizeOrder($lines, $buyerInfo, $session);
-                $session->set('checkout_token', true);
-                go($site->find('success')->url());
+                $order = processOrder($orderId, ['method' => 'offline']);
             } catch (Throwable $e) {
-                error_log('[checkout] Order failed: ' . $e->getMessage());
+                error_log("[order {$orderId}] Processing failed: " . $e->getMessage());
+                $order = null;
+            }
+
+            if (!$order || $order->state()->value() === 'pending') {
                 $session->set('checkout_error', 'Something went wrong. Please try again.');
                 go($page->url());
             }
+
+            clearCheckoutSession($session);
+            $session->set('checkout_token', true);
+            go($site->find('success')->url());
         }
 
         try {
-            $session->set('checkout_token', bin2hex(random_bytes(16)));
-
             \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
 
             $line_items = [];
@@ -116,25 +134,38 @@ return function ($page, $site, $kirby) {
                 ];
             }
 
-            // Stripe fills in {CHECKOUT_SESSION_ID}; the success page uses it to verify the payment
+            // The order id travels with the payment: Stripe hands it back with the paid
+            // session, which is how the payment is matched to its order.
+            // Stripe fills in {CHECKOUT_SESSION_ID}; the success page uses it to verify the payment.
             $stripeSession = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ['card'],
                 'line_items'           => $line_items,
                 'mode'                 => 'payment',
+                'client_reference_id'  => $orderId,
+                'metadata'             => ['order_id' => $orderId],
                 'success_url'          => $site->find('success')->url() . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url'           => $page->url(),
             ]);
-
-            // Snapshot of exactly what Stripe will charge: the order is recorded from this,
-            // not from the live cart, so a price edited during payment can't skew it
-            $session->set('stripe_session_id', $stripeSession->id);
-            $session->set('checkout_lines', $lines);
-            go($stripeSession->url);
         } catch (Throwable $e) {
-            error_log('[checkout] Stripe session failed: ' . $e->getMessage());
+            // Nothing was charged: the pending order has nothing to record
+            error_log("[order {$orderId}] Stripe session failed: " . $e->getMessage());
+            try {
+                $order->delete();
+            } catch (Throwable $e) {
+                error_log("[order {$orderId}] Pending order could not be deleted: " . $e->getMessage());
+            }
             $session->set('checkout_error', 'Payment could not be started. Please try again.');
             go($page->url());
         }
+
+        try {
+            $order->update(['stripeSessionId' => $stripeSession->id]);
+        } catch (Throwable $e) {
+            // Not blocking: the payment is matched through the metadata order id
+            error_log("[order {$orderId}] Stripe session id not saved: " . $e->getMessage());
+        }
+
+        go($stripeSession->url);
     }
 
     // GET: read the flashed error and values, if any

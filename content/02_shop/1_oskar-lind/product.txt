@@ -6,9 +6,7 @@ Shortdescription: Suede derby, crepe sole
 
 ----
 
-Productimage:
-
-- file://ktbgqs96o9he260k
+Productimage: - file://ktbgqs96o9he260k
 
 ----
 
@@ -24,7 +22,7 @@ Price: 2480
 
 ----
 
-Stock: 10
+Stock: 9
 
 ----
 

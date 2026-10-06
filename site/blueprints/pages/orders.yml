@@ -7,9 +7,18 @@ columns:
     width: 2/3
     sections:
       pendingOrders:
-        headline: Pending
+        headline: To fulfil
         type: pages
-        status: draft
+        query: page.drafts.filterBy("state", "!=", "pending")
+        info: "{{ page.emailError }}"
+        create: false
+
+      # Checkouts sent to Stripe and not paid (yet): abandoned ones stay here
+      awaitingPayment:
+        headline: Awaiting payment
+        type: pages
+        query: page.drafts.filterBy("state", "pending")
+        info: "{{ page.createdAt }}"
         create: false
 
   treated:
@@ -25,4 +34,5 @@ columns:
         headline: Issue
         type: pages
         status: unlisted
+        info: "{{ page.lastError }}"
         create: false

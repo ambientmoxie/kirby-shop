@@ -1,6 +1,31 @@
 <?php
 
 use Kirby\Cms\Page;
+use Kirby\Content\VersionCache;
+use Kirby\Filesystem\Dir;
+
+// Runs $fn while holding an exclusive lock shared by every PHP process on this server
+// (flock on site/storage/locks/{name}.lock), so read → check → write sequences from
+// different requests can't interleave. Once the lock is held, Kirby's in-memory content
+// cache is cleared: content read earlier in this request may have changed on disk.
+function withLock(string $name, callable $fn): mixed
+{
+    $file = kirby()->root('site') . "/storage/locks/{$name}.lock";
+    Dir::make(dirname($file));
+
+    $handle = fopen($file, 'c');
+    if ($handle === false || !flock($handle, LOCK_EX)) {
+        throw new Exception("Lock '{$name}' could not be acquired.");
+    }
+
+    try {
+        VersionCache::reset();
+        return $fn();
+    } finally {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+    }
+}
 
 // Cart lines stored in the session: only id (page UUID) and quantity. Title, colour,
 // price and stock are always read from the product page, so an edit in the Panel
