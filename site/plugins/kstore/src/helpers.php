@@ -100,11 +100,8 @@ function cartLines(): array
         $lines[] = [
             'id'       => $item['id'],
             'product'  => $product,
-            'title'    => $product->title()->value(),
             'color'    => (string)$product->color()->value(),
             'price'    => $product->price()->toFloat(),
-            'stock'    => $product->stock()->toInt(),
-            'thumb'    => $product->productImage()->toFile()?->resize(100)->url() ?? '',
             'quantity' => $item['quantity'],
         ];
     }

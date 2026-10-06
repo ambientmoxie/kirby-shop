@@ -89,8 +89,7 @@ return function ($page, $site, $kirby) {
             go($page->url());
         }
 
-        $order = $placed['order'];
-
+        $order   = $placed['order'];
         $orderId = $order->orderId()->value();
         $session->set('pending_order_id', $orderId);
 

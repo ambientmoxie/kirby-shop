@@ -116,8 +116,8 @@ function buyerFullName(Page|array $buyer): string
 // Emails are tracked apart from the state (emailsSent / emailError): a failed email
 // never undoes a valid order, and is retried on the next processOrder() call.
 //
-// processOrder() is safe to call any number of times for the same order (Stripe webhook
-// redelivery, success page reload): it runs under the "orders" lock, reloads the order
+// processOrder() is safe to call any number of times for the same order (success page
+// reload, expired-checkout check): it runs under the "orders" lock, reloads the order
 // from disk, and resumes from its saved state. A failing step is logged, saved in
 // lastError, and the order is moved to the Panel's "Issue" column (unlisted); the next
 // call retries from that same step.
@@ -244,12 +244,7 @@ function reconcileExpiredCheckouts(): void
         }
 
         if ($stripeSession->payment_status === 'paid') {
-            processOrder($orderId, [
-                'method'    => 'stripe',
-                'sessionId' => $stripeSession->id,
-                'amount'    => $stripeSession->amount_total,
-                'currency'  => $stripeSession->currency,
-            ]);
+            processOrder($orderId, stripePayment($stripeSession));
         } elseif ($stripeSession->status === 'expired') {
             kirby()->impersonate('kirby');
             $order->delete();
@@ -562,10 +557,16 @@ function finalizeFromStripe(string $stripeSessionId): ?Page
         return null;
     }
 
-    return processOrder($orderId, [
+    return processOrder($orderId, stripePayment($stripeSession));
+}
+
+// What a paid Stripe Checkout session tells processOrder()
+function stripePayment(\Stripe\Checkout\Session $stripeSession): array
+{
+    return [
         'method'    => 'stripe',
         'sessionId' => $stripeSession->id,
         'amount'    => $stripeSession->amount_total,
         'currency'  => $stripeSession->currency,
-    ]);
+    ];
 }
