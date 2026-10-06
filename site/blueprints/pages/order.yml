@@ -94,6 +94,10 @@ tabs:
             type: text
             disabled: true
             width: 1/2
+          reservedUntil:
+            label: Stock reserved until (while awaiting payment)
+            type: text
+            disabled: true
           stockApplied:
             label: Stock updated for
             type: text

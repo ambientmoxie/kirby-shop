@@ -8,8 +8,15 @@ use Kirby\Filesystem\Dir;
 // (flock on site/storage/locks/{name}.lock), so read → check → write sequences from
 // different requests can't interleave. Once the lock is held, Kirby's in-memory content
 // cache is cleared: content read earlier in this request may have changed on disk.
+// Re-entrant: a nested call for a lock this request already holds just runs $fn
+// (flock-ing the same file twice from one process would wait on itself forever).
 function withLock(string $name, callable $fn): mixed
 {
+    static $held = [];
+    if (isset($held[$name])) {
+        return $fn();
+    }
+
     $file = kirby()->root('site') . "/storage/locks/{$name}.lock";
     Dir::make(dirname($file));
 
@@ -18,10 +25,13 @@ function withLock(string $name, callable $fn): mixed
         throw new Exception("Lock '{$name}' could not be acquired.");
     }
 
+    $held[$name] = true;
+
     try {
         VersionCache::reset();
         return $fn();
     } finally {
+        unset($held[$name]);
         flock($handle, LOCK_UN);
         fclose($handle);
     }

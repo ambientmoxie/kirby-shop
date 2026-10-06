@@ -2,6 +2,7 @@
 
 use Kirby\Cms\Page;
 use Kirby\Content\ImmutableMemoryStorage;
+use Kirby\Data\Data;
 use Kirby\Data\Yaml;
 use Kirby\Filesystem\Dir;
 use Kirby\Toolkit\Str;
@@ -133,6 +134,129 @@ function isWritablePage(Page $page): bool
     return !($page->storage() instanceof ImmutableMemoryStorage);
 }
 
+// STOCK RESERVATIONS
+// ------------------
+// A pending order reserves its quantities until its "reservedUntil" time: while the
+// customer is paying on Stripe, those units are taken for everyone else. So the stock
+// available to a new checkout is: stock − quantities of unexpired pending orders.
+//
+// - Reserving (placeOrder) and decrementing (applyInventory) both run under the
+//   "orders" lock, so two checkouts can never reserve the same last unit.
+// - The Stripe session expires (expires_at) before the reservation does, so a session
+//   can't be paid once its reservation has run out. The gap between the two leaves the
+//   customer time to come back to the success page.
+// - An expired reservation simply stops counting: no cron job needed. At each checkout,
+//   expired Stripe checkouts are checked with Stripe (reconcileExpiredCheckouts): paid
+//   ones, whose customer never came back to the success page, are finalized; expired
+//   unpaid ones are deleted.
+// - Reservations are read straight from the order files on disk, not from Kirby's
+//   in-memory pages, so they are current while the lock is held.
+
+const KSTORE_STRIPE_SESSION_MINUTES = 31; // Stripe requires at least 30
+const KSTORE_RESERVATION_MINUTES    = 40;
+
+// Quantities held by unexpired pending orders, per product id
+function reservedStock(): array
+{
+    $root = page('orders')?->root();
+    if (!$root) return [];
+
+    $reserved = [];
+    foreach (glob($root . '/_drafts/*/order.txt') ?: [] as $file) {
+        try {
+            $data  = Data::read($file);
+            $items = Yaml::decode($data['items'] ?? '');
+        } catch (Throwable $e) {
+            error_log("[stock] Unreadable order file {$file}: " . $e->getMessage());
+            continue;
+        }
+
+        if (($data['state'] ?? '') !== 'pending') continue;
+        if ((strtotime((string)($data['reserveduntil'] ?? '')) ?: 0) <= time()) continue;
+
+        foreach ($items as $item) {
+            $item = array_change_key_case((array)$item);
+            $id   = (string)($item['productid'] ?? '');
+            if ($id !== '') {
+                $reserved[$id] = ($reserved[$id] ?? 0) + (int)($item['quantity'] ?? 0);
+            }
+        }
+    }
+    return $reserved;
+}
+
+// Reserves the lines and creates the pending order, or returns why it can't:
+// ['order' => Page|null, 'problems' => string[]]
+function placeOrder(array $lines, array $buyerInfo, string $paymentMethod): array
+{
+    return withLock('orders', function () use ($lines, $buyerInfo, $paymentMethod) {
+        reconcileExpiredCheckouts();
+
+        $reserved = reservedStock();
+        $problems = [];
+
+        foreach ($lines as $line) {
+            $stock     = cartProduct($line['id'])?->stock()->toInt() ?? 0;
+            $available = $stock - ($reserved[$line['id']] ?? 0);
+
+            if ($available < $line['quantity']) {
+                $problems[] = $available > 0
+                    ? "Only {$available} × {$line['title']} available right now."
+                    : "{$line['title']} is not available right now.";
+            }
+        }
+
+        if ($problems) {
+            return ['order' => null, 'problems' => $problems];
+        }
+
+        return ['order' => createPendingOrder($lines, $buyerInfo, $paymentMethod), 'problems' => []];
+    });
+}
+
+// Expired Stripe checkouts: asks Stripe what became of each one. Paid: the order is
+// finalized (its customer never made it back to the success page). Expired unpaid: the
+// order is deleted (nothing was charged, its reservation has already lapsed). Anything
+// else (Stripe unreachable, session still open) is left for the next checkout.
+function reconcileExpiredCheckouts(): void
+{
+    $expired = page('orders')?->drafts()->filter(fn($order) =>
+        $order->state()->value() === 'pending' &&
+        $order->paymentMethod()->value() === 'stripe' &&
+        (strtotime($order->reservedUntil()->value()) ?: 0) <= time()
+    )->values() ?? [];
+
+    foreach ($expired as $order) {
+        $orderId   = $order->orderId()->value();
+        $sessionId = $order->stripeSessionId()->value();
+
+        if ($sessionId === '') {
+            error_log("[order {$orderId}] Expired checkout without a Stripe session id: check it in the Stripe dashboard.");
+            continue;
+        }
+
+        try {
+            \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
+            $stripeSession = \Stripe\Checkout\Session::retrieve($sessionId);
+        } catch (Throwable $e) {
+            error_log("[order {$orderId}] Stripe lookup for expired checkout failed: " . $e->getMessage());
+            continue;
+        }
+
+        if ($stripeSession->payment_status === 'paid') {
+            processOrder($orderId, [
+                'method'    => 'stripe',
+                'sessionId' => $stripeSession->id,
+                'amount'    => $stripeSession->amount_total,
+                'currency'  => $stripeSession->currency,
+            ]);
+        } elseif ($stripeSession->status === 'expired') {
+            kirby()->impersonate('kirby');
+            $order->delete();
+        }
+    }
+}
+
 function createPendingOrder(array $lines, array $buyerInfo, string $paymentMethod): Page
 {
     $ordersPage = page('orders');
@@ -161,6 +285,7 @@ function createPendingOrder(array $lines, array $buyerInfo, string $paymentMetho
             'state'                  => 'pending',
             'paymentMethod'          => $paymentMethod,
             'createdAt'              => date('Y-m-d H:i:s'),
+            'reservedUntil'          => date('Y-m-d H:i:s', time() + KSTORE_RESERVATION_MINUTES * 60),
             'items'                  => Yaml::encode($items),
             'total'                  => linesTotal($lines),
             'name'                   => (string)($buyerInfo['name'] ?? ''),
@@ -252,9 +377,27 @@ function confirmOrder(Page &$order, array $payment): void
     ]);
 }
 
+// STOCK STRATEGY
+// --------------
+// Overselling is prevented by reservations (see STOCK RESERVATIONS): units are set aside
+// when the customer is sent to Stripe. Here, under the same "orders" lock, the order's
+// stock is decremented for good; units still reserved by other pending orders count as
+// taken, and this order (no longer pending) no longer reserves its own.
+//
+// Safety net: every remaining line is checked before any stock changes. A shortage can
+// only happen if the reservation ran out before the order was confirmed, or the stock
+// was lowered in the Panel meanwhile. Then nothing is decremented: the order goes to
+// "Issue" with the shortage in lastError, and the admin decides (restock, or refund).
+// Stock is never clamped to hide a shortage.
+//
+// Limit: stock edited in the Panel is not under this lock. An edit saved at the very
+// moment an order is processed can overwrite that order's decrement.
 function applyInventory(Page &$order): void
 {
-    $applied = $order->stockApplied()->split();
+    $applied   = $order->stockApplied()->split();
+    $reserved  = reservedStock();
+    $toApply   = [];
+    $shortages = [];
 
     foreach ($order->items()->toStructure() as $item) {
         $productId = $item->productId()->value();
@@ -265,9 +408,24 @@ function applyInventory(Page &$order): void
             throw new Exception("Product {$productId} can't be written safely in this request.");
         }
 
+        $qty = $item->quantity()->toInt();
         if ($product) {
-            $qty = $item->quantity()->toInt();
-            $product->update(['stock' => max(0, $product->stock()->toInt() - $qty)]);
+            $available = $product->stock()->toInt() - ($reserved[$productId] ?? 0);
+            if ($available < $qty) {
+                $shortages[] = "{$item->title()}: {$qty} ordered, {$available} available";
+            }
+        }
+
+        $toApply[] = [$productId, $product, $qty];
+    }
+
+    if ($shortages) {
+        throw new Exception('Stock conflict, no stock was changed. ' . implode('; ', $shortages) . '. Restock or refund.');
+    }
+
+    foreach ($toApply as [$productId, $product, $qty]) {
+        if ($product) {
+            $product->update(['stock' => $product->stock()->toInt() - $qty]);
         } else {
             error_log("[order {$order->orderId()}] Product {$productId} no longer exists, stock not updated.");
         }

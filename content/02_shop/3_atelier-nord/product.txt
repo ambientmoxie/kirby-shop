@@ -22,7 +22,7 @@ Price: 3120
 
 ----
 
-Stock: 9
+Stock: 7
 
 ----
 

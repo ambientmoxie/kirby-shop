@@ -73,14 +73,23 @@ return function ($page, $site, $kirby) {
         ];
 
         // The order is saved before any payment, with the lines above as its snapshot:
-        // whatever happens next (payment, browser closed, failure) there is a record of it
+        // whatever happens next (payment, browser closed, failure) there is a record of it.
+        // Creating it reserves its stock, or fails if other checkouts hold the last units.
         try {
-            $order = createPendingOrder($lines, $buyerInfo, isStripeEnabled() ? 'stripe' : 'offline');
+            $placed = placeOrder($lines, $buyerInfo, isStripeEnabled() ? 'stripe' : 'offline');
         } catch (Throwable $e) {
             error_log('[checkout] Pending order could not be created: ' . $e->getMessage());
             $session->set('checkout_error', 'Something went wrong. Please try again.');
             go($page->url());
         }
+
+        if ($placed['problems']) {
+            $session->set('checkout_error', implode(' ', $placed['problems']) . ' Please adjust your cart or try again in a few minutes.');
+            $session->set('checkout_values', compact('name', 'surname', 'email', 'address', 'zipcode', 'city', 'country', 'message'));
+            go($page->url());
+        }
+
+        $order = $placed['order'];
 
         $orderId = $order->orderId()->value();
         $session->set('pending_order_id', $orderId);
@@ -141,6 +150,8 @@ return function ($page, $site, $kirby) {
                 'payment_method_types' => ['card'],
                 'line_items'           => $line_items,
                 'mode'                 => 'payment',
+                // Ends before the order's stock reservation does: see STOCK RESERVATIONS
+                'expires_at'           => time() + KSTORE_STRIPE_SESSION_MINUTES * 60,
                 'client_reference_id'  => $orderId,
                 'metadata'             => ['order_id' => $orderId],
                 'success_url'          => $site->find('success')->url() . '?session_id={CHECKOUT_SESSION_ID}',
@@ -158,8 +169,10 @@ return function ($page, $site, $kirby) {
             go($page->url());
         }
 
+        // Under the lock: reservations are read from the order files while it is held,
+        // so a checkout must never see this file half-written
         try {
-            $order->update(['stripeSessionId' => $stripeSession->id]);
+            withLock('orders', fn() => $order->update(['stripeSessionId' => $stripeSession->id]));
         } catch (Throwable $e) {
             // Not blocking: the payment is matched through the metadata order id
             error_log("[order {$orderId}] Stripe session id not saved: " . $e->getMessage());
