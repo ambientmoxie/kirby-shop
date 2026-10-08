@@ -6,8 +6,6 @@
 
     <div class="newsletter__content">
 
-        <p class="newsletter__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-
         <form class="newsletter__form" method="post">
             <input type="hidden" name="_form" value="newsletter">
 

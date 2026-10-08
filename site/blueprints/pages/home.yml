@@ -12,5 +12,5 @@ sections:
   info:
     type: info
     text: |
-      The home page is built from snippets in `site/snippets/sections` (hero, product list, FAQ).
+      The home page is built from snippets in `site/snippets/sections` (hero, product list).
       Products are managed in the Store tab.

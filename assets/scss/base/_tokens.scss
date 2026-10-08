@@ -32,8 +32,12 @@
   // Page side padding, shared by every section
   --gutter: var(--space-l);
 
+  // Vertical space around the home sections
+  --section-space: var(--space-xl);
+
   @include mobile {
     --gutter: var(--space-m);
+    --section-space: var(--space-l);
   }
 
   // Misc

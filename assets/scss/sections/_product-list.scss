@@ -1,9 +1,12 @@
 @use "../abstracts/mixins" as *;
 
 .product-list {
+  padding-block: var(--space-l) var(--section-space);
+
+  // Title and arrows sit close to the cards they control
   &__header {
     @include flex-between;
-    padding: var(--gutter);
+    padding: 0 var(--gutter) var(--space-m);
   }
 
   &__title {
