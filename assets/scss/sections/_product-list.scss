@@ -28,11 +28,27 @@
   }
 
   &__products {
-    margin-left: var(--gutter);
+    padding-inline: var(--space-m);
+
+    .flickity-viewport {
+      margin-inline: calc(-1 * var(--space-m));
+    }
+
+    .flickity-slider {
+      left: var(--space-m);
+    }
 
     // Flickity positions cells absolutely, so spacing has to be a margin
     .product {
       margin-right: var(--space-m);
+
+      // The 50rem desktop card is wider than a phone: size it to the screen,
+      // leaving the next card peeking in, and make it portrait so the image
+      // and text still fit
+      @include mobile {
+        width: 85vw;
+        aspect-ratio: 4 / 5;
+      }
     }
   }
 }

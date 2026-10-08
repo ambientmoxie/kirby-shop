@@ -13,6 +13,9 @@ export default function initCarousels() {
       pageDots: false,
       prevNextButtons: false, // we supply our own
       draggable: true,
+      // Position in px: the slider is wider than Flickity's measured inner
+      // width (see _product-list.scss), so % offsets would drift per slide
+      percentPosition: false,
     });
 
     const scope = el.parentElement;
