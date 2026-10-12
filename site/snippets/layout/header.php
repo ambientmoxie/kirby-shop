@@ -3,7 +3,7 @@
 // $intro is printed as HTML so it can hold live markup (the checkout subtotal):
 // escape anything that comes from content or the request before passing it.
 $tagline ??= 'self hosted e-commerce starter';
-$intro   ??= 'A self-hosted e-commerce starter built on Kirby CMS with Stripe Checkout. Designed for developers who need to ship a cost-effective online shop for clients with moderate needs.';
+$intro   ??= 'A self-hosted e-commerce starter built on Kirby CMS with Stripe Checkout. Designed for developers who need to ship a cost-effective online shop for clients with moderate needs. Get the source on <a href="https://github.com/ambientmoxie/kirby-shop" target="_blank">GitHub</a>.';
 ?>
 <?php snippet('layout/head') ?>
 

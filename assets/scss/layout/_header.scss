@@ -10,4 +10,10 @@
     font-weight: 700;
     text-transform: uppercase;
   }
+
+  // Same look as the add-to-cart link
+  &__intro a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
 }
