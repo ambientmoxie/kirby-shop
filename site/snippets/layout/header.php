@@ -12,5 +12,5 @@ $intro   ??= 'A self-hosted e-commerce starter built on Kirby CMS with Stripe Ch
     <p class="header__tagline"><?= esc($tagline) ?></p>
     <p class="header__intro"><?= $intro ?></p>
 
-    <button type="button" class="cart-button" data-cart-open>Cart<span data-cart-count>(<?= cartCount() ?>)</span></button>
+    <button type="button" class="cart-button" data-cart-open>Cart <span data-cart-count>(<?= cartCount() ?>)</span></button>
 </header>

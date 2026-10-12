@@ -15,7 +15,7 @@ $cover = $product->productImage()->toFile();
 
     <?php if ($cover): ?>
         <div class="cart-item__image">
-            <?php snippet('components/picture', ['image' => $cover, 'sizes' => '72px']) ?>
+            <?php snippet('components/picture', ['image' => $cover, 'sizes' => '80px']) ?>
         </div>
     <?php endif ?>
 

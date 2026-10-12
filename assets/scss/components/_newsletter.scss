@@ -4,6 +4,7 @@
   &__input {
     @include field;
     width: var(--field-width);
+    max-width: 100%; // shrinks to the screen on mobile
     margin: var(--space-xs) 0;
   }
 

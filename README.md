@@ -60,7 +60,7 @@ public/             # Web server document root
   assets/           # Static assets (images, fonts)
   build/            # Compiled JS/CSS (generated)
 assets/             # Source files
-  js/               # JavaScript modules (cart, drawer, carousel, dropdown)
+  js/               # JavaScript modules (cart, drawer)
   scss/             # base / layout / sections / components / pages
 site/
   blueprints/       # Panel forms
@@ -69,7 +69,7 @@ site/
   storage/          # Runtime data: order number counter, locks (generated, not in git)
   snippets/
     layout/         # head, header, footer
-    sections/       # home page sections (hero, product list, FAQ)
+    sections/       # home page sections (product list)
     components/     # product card, cart drawer, newsletter, picture...
   templates/        # home, checkout, success + emails
 ```

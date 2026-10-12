@@ -10,7 +10,12 @@ $soldOut = $product->stock()->toInt() === 0;
 <article class="product">
 
     <?php if ($cover): ?>
-        <?php snippet('components/picture', ['image' => $cover, 'sizes' => '500px', 'class' => 'product__image']) ?>
+        <?php // One grid column: 4, 3, 2 then 1 per row (see _product-list.scss) ?>
+        <?php snippet('components/picture', [
+            'image' => $cover,
+            'sizes' => '(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw',
+            'class' => 'product__image',
+        ]) ?>
     <?php endif ?>
 
     <div class="product__footer">

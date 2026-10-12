@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as *;
+
 // Design tokens: every color, size and spacing value used by the site.
 // Components read these instead of hard-coding values.
 :root {
@@ -46,4 +48,11 @@
   // Stacking: the drawer covers the fixed cart button
   --z-cart-button: 10;
   --z-drawer: 20;
+
+  // Smaller type on mobile: body text covers everything set in --fs-base
+  // (header, cart button, product cards, newsletter, drawer, checkout)
+  @include below($mobile) {
+    --fs-display: 4.8rem;
+    --fs-base: 1.8rem;
+  }
 }
