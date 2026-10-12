@@ -2,8 +2,12 @@ Title: Kirby Shop
 
 ----
 
-Newsletter: 
+Newsletter:
+
+- 
+  date: 2026-10-12
+  value: maximebenoit03@gmail.com
 
 ----
 
-Stripeenabled: false
+Stripeenabled: true

@@ -1,7 +1,16 @@
+<?php
+// Templates can pass their own $tagline and $intro; the home page uses these defaults.
+// $intro is printed as HTML so it can hold live markup (the checkout subtotal):
+// escape anything that comes from content or the request before passing it.
+$tagline ??= 'self hosted e-commerce starter';
+$intro   ??= 'A self-hosted e-commerce starter built on Kirby CMS with Stripe Checkout. Designed for developers who need to ship a cost-effective online shop for clients with moderate needs.';
+?>
 <?php snippet('layout/head') ?>
 
 <header class="header">
-    <div class="header__catchphrase">Self-hosted e-commerce</div>
-    <a class="header__logo" href="<?= $site->url() ?>" aria-label="Home"><?= asset('assets/images/logo.svg')->read() ?></a>
-    <button type="button" class="header__bag-button" data-cart-open>Bag <span class="header__bag-count">(<?= cartCount() ?>)</span></button>
+    <h1 class="header__title"><a href="<?= $site->url() ?>">krbshp</a></h1>
+    <p class="header__tagline"><?= esc($tagline) ?></p>
+    <p class="header__intro"><?= $intro ?></p>
+
+    <button type="button" class="cart-button" data-cart-open>Cart<span data-cart-count>(<?= cartCount() ?>)</span></button>
 </header>

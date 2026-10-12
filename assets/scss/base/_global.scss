@@ -1,6 +1,15 @@
 body {
-  font-family: var(--font-sans);
+  padding: var(--page-padding);
+  font-family: var(--font-body);
   font-size: var(--fs-base);
   background-color: var(--color-bg);
   color: var(--color-text);
+}
+
+// Wraps every page (opened in head.php, closed in foot.php)
+.page {
+  display: grid;
+  // minmax(0, …) stops wide content (the display title) from stretching every section past the screen
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--section-gap);
 }

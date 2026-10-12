@@ -1,0 +1,101 @@
+@use "../abstracts/mixins" as *;
+
+// drawer.js toggles .is-open on the drawer and .is-drawer-open on body
+.cart-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  visibility: hidden;
+
+  &.is-open {
+    visibility: visible;
+  }
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-overlay);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  &.is-open &__backdrop {
+    opacity: 1;
+  }
+
+  &__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: var(--drawer-width);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg);
+    border-left: var(--border);
+    transform: translateX(100%);
+    transition: transform var(--transition);
+  }
+
+  &.is-open &__panel {
+    transform: translateX(0);
+  }
+
+  &__head,
+  &__items,
+  &__foot {
+    padding: var(--page-padding);
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: var(--border);
+  }
+
+  &__title {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__close {
+    @include button-text;
+  }
+
+  // The only scrolling region, so a long cart can't push the footer off screen
+  &__items {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+  }
+
+  &__empty {
+    color: var(--color-muted);
+  }
+
+  &__foot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    border-top: var(--border);
+  }
+
+  &__subtotal {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__checkout {
+    @include button-primary;
+    text-align: center;
+  }
+}
+
+// Stop the page behind the drawer from scrolling
+body.is-drawer-open {
+  overflow: hidden;
+}

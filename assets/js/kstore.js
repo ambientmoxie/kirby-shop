@@ -2,7 +2,7 @@
 // the drawer list, bag count and subtotals from the server's response.
 export default class KStore {
   constructor() {
-    this.count = document.querySelector(".header__bag-count");
+    this.count = document.querySelector("[data-cart-count]");
     this.list = document.getElementById("cart-items");
 
     // A page can show the subtotal more than once (drawer + checkout title)

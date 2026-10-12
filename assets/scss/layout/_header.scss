@@ -1,0 +1,11 @@
+.header {
+  &__title {
+    font-size: var(--fs-display);
+    text-transform: uppercase;
+  }
+
+  &__tagline {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}

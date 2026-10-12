@@ -1,0 +1,22 @@
+@use "../abstracts/breakpoints" as *;
+
+.product-list {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: var(--grid-gap);
+
+    // Fewer columns as the screen narrows: 4 → 3 → 2 → 1
+    @include below($tablet) {
+      --grid-columns: 3;
+    }
+
+    @include below($mobile) {
+      --grid-columns: 2;
+    }
+
+    @include below($phone) {
+      --grid-columns: 1;
+    }
+  }
+}

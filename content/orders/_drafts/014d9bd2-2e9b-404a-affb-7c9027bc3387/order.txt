@@ -1,0 +1,100 @@
+Title: KS-2026-000007 - Maxime Benoit
+
+----
+
+Ordernumber: KS-2026-000007
+
+----
+
+Total: 3120
+
+----
+
+Items:
+
+- 
+  productid: 7rf29w0yukvcx3y4
+  title: Atelier Nord
+  color: Sand
+  quantity: 1
+  price: 3120
+
+----
+
+State: completed
+
+----
+
+Paymentmethod: offline
+
+----
+
+Lasterror: 
+
+----
+
+Emailssent: true
+
+----
+
+Emailerror: 
+
+----
+
+Createdat: 2026-10-12 10:10:09
+
+----
+
+Confirmedat: 2026-10-12 10:10:09
+
+----
+
+Reserveduntil: 2026-10-12 10:50:09
+
+----
+
+Stockapplied: 7rf29w0yukvcx3y4
+
+----
+
+Orderid: 014d9bd2-2e9b-404a-affb-7c9027bc3387
+
+----
+
+Stripesessionid: 
+
+----
+
+Name: Maxime
+
+----
+
+Surname: Benoit
+
+----
+
+Email: maximebenoit03@gmail.com
+
+----
+
+Address: 38 Rue Jules Vanzuppe
+
+----
+
+Zipcode: 94200
+
+----
+
+City: Ivry-sur-Seine
+
+----
+
+Country: France
+
+----
+
+Additionalinformations: kujghviuhoouihjl
+
+----
+
+Uuid: xjygpsejr24bnhx6

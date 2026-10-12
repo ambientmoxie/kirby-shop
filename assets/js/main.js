@@ -8,11 +8,10 @@ import DropdownHandler from "./dropdown";
 // Lazy-load `.lazy` images, and re-scan whenever new ones show up
 const lazyLoad = new LazyLoad();
 document.addEventListener("cart:refreshed", () => lazyLoad.update());
-document.addEventListener("carousel:settled", () => lazyLoad.update());
 
 new KStore();
 initCartDrawer();
-initCarousels();
+// initCarousels();
 
 // FAQ (does nothing on pages without a .dropdown)
 new DropdownHandler(".dropdown", {

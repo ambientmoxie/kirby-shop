@@ -1,0 +1,12 @@
+// Screen widths where the layout changes. Sass variables, not custom
+// properties, because var() can't be used inside a media query.
+$tablet: 1024px;
+$mobile: 768px;
+$phone: 480px;
+
+// Styles for screens at or below $width: @include below($mobile) { ... }
+@mixin below($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}

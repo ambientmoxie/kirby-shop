@@ -1,47 +1,49 @@
-@use "../abstracts/mixins" as *;
-
+// Design tokens: every color, size and spacing value used by the site.
+// Components read these instead of hard-coding values.
 :root {
   // Colors
-  --color-bg: #0a0a0a;
-  --color-surface: #151515; // cards and form fields
-  --color-text: #fafafa;
-  --color-muted: #999999;
-  --color-border: #3a3a3a;
-  --color-button: #696969;
-  --color-error: #e5484d;
+  --color-bg: #fff;
+  --color-text: #000;
+  --color-muted: #c0c0c0; // secondary text (legal footer)
+  --color-error: #e5484d; // form errors
+  --color-accent: #000fa6; // actions (add to cart)
 
-  // Fonts
-  --font-sans: "ABCFavorit", sans-serif;
-  --font-mono: "Nitti", monospace;
+  // Typography
+  --font-body: arial;
+  --fs-display: 13.5rem; // site name
+  --fs-base: 2.4rem;
+  --fs-small: 1.6rem;
+  --fs-xsmall: 1.4rem; // buttons
 
-  // Font sizes (1rem = 10px)
-  --fs-small: 1.3rem;
-  --fs-base: 1.5rem;
-  --fs-medium: 1.8rem;
-  --fs-large: 2.4rem;
-  --fs-xlarge: 2.7rem;
-  --fs-xxlarge: 3rem;
-
-  // Spacing
-  --space-xs: 0.5rem;
-  --space-s: 1rem;
+  // Spacing scale
+  --space-xs: 1rem;
+  --space-s: 1.5rem;
   --space-m: 2rem;
-  --space-l: 4rem;
-  --space-xl: 15rem;
+  --space-l: 3rem;
+  --space-xl: 5rem;
+  --space-xxl: 8rem;
 
-  // Page side padding, shared by every section
-  --gutter: var(--space-l);
+  // Layout
+  --page-padding: var(--space-m);
+  --section-gap: var(--space-xl); // between header, product list and footer
+  --grid-columns: 4;
+  --grid-gap: var(--space-l);
 
-  // Vertical space around the home sections
-  --section-space: var(--space-xl);
+  // Form controls
+  --border: 1px solid var(--color-text);
+  --field-width: 50rem;
+  --field-height: 6rem;
+  --form-width: 100rem; // checkout form
 
-  @include mobile {
-    --gutter: var(--space-m);
-    --section-space: var(--space-l);
-  }
+  // Cart drawer
+  --drawer-width: 50rem;
+  --thumb-size: 8rem; // product image in a cart line
+  --color-overlay: rgba(0, 0, 0, 0.3); // backdrop behind the drawer
 
-  // Misc
-  --radius: 0.5rem;
-  --radius-pill: 50px;
-  --content-width: 100rem;
+  // Motion
+  --transition: 0.25s ease;
+
+  // Stacking: the drawer covers the fixed cart button
+  --z-cart-button: 10;
+  --z-drawer: 20;
 }

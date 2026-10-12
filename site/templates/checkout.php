@@ -1,19 +1,16 @@
-<?php snippet('layout/header') ?>
-
 <?php
 $payment = isStripeEnabled()
     ? 'You will be redirected to Stripe for payment.'
     : 'The vendor will contact you soon to finalize payment.';
+
+// kstore.js keeps [data-cart-subtotal] in sync when the cart changes
+snippet('layout/header', [
+    'tagline' => 'checkout',
+    'intro'   => 'You are about to place an order of <span data-cart-subtotal>' . formatPrice(cartSubtotal()) . '</span>. ' . $payment,
+]);
 ?>
 
 <div class="checkout">
-
-    <div class="checkout__head">
-        <h1 class="checkout__title">Checkout</h1>
-        <p class="checkout__summary">
-            You are about to place an order of <span data-cart-subtotal><?= formatPrice(cartSubtotal()) ?></span>. <?= $payment ?>
-        </p>
-    </div>
 
     <form class="checkout__form" action="<?= $page->url() ?>" method="POST">
 

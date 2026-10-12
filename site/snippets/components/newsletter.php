@@ -28,8 +28,6 @@
             <p class="newsletter__error" role="alert"><?= esc($error) ?></p>
         <?php endif ?>
 
-        <p class="newsletter__legal">By submitting, you agree to the Terms and Conditions and Privacy Policy.</p>
-
     </div>
 
 </section>

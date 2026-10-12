@@ -1,0 +1,18 @@
+@use "../abstracts/mixins" as *;
+
+.newsletter {
+  &__input {
+    @include field;
+    width: var(--field-width);
+    margin: var(--space-xs) 0;
+  }
+
+  &__submit {
+    @include button-primary;
+  }
+
+  // Bot trap, see site.php
+  &__honeypot {
+    display: none;
+  }
+}
