@@ -16,6 +16,10 @@
   &__intro {
     align-self: end;
 
+    a {
+      color: var(--color-accent);
+    }
+
     @include below($mobile) {
       grid-row: 2;
       grid-column: 1 / -1;
