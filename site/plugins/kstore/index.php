@@ -11,13 +11,17 @@ require_once __DIR__ . '/src/cart/update-cart-item.php';
 require_once __DIR__ . '/src/cart/render-cart.php';
 
 Kirby::plugin('kirbyshop/kstore', [
-    // A file with the same name in site/blueprints or site/templates overrides these
+    // A file with the same name in site/ (blueprints, controllers, snippets, templates) overrides these
     'blueprints' => [
-        'pages/product'               => __DIR__ . '/blueprints/pages/product.yml',
-        'pages/order'                 => __DIR__ . '/blueprints/pages/order.yml',
-        'pages/orders'                => __DIR__ . '/blueprints/pages/orders.yml',
-        'kstore/tabs/orders'          => __DIR__ . '/blueprints/tabs/orders.yml',
+        'pages/product'                => __DIR__ . '/blueprints/pages/product.yml',
+        'pages/order'                  => __DIR__ . '/blueprints/pages/order.yml',
+        'pages/orders'                 => __DIR__ . '/blueprints/pages/orders.yml',
+        'kstore/tabs/orders'           => __DIR__ . '/blueprints/tabs/orders.yml',
         'kstore/fields/stripe-enabled' => __DIR__ . '/blueprints/fields/stripe-enabled.yml',
+    ],
+    'controllers' => [
+        'checkout' => require __DIR__ . '/controllers/checkout.php',
+        'success'  => require __DIR__ . '/controllers/success.php',
     ],
     'snippets' => [
         'kstore/cart-item' => __DIR__ . '/snippets/cart-item.php',
