@@ -50,6 +50,22 @@ return function ($page, $site, $kirby) {
             go($page->url());
         }
 
+        // Back from Stripe without paying (closed tab, Back link): release that order first,
+        // so its reservation doesn't block this one
+        try {
+            $paidSessionId = releasePreviousCheckout((string)$session->get('pending_order_id'));
+        } catch (Throwable $e) {
+            error_log('[checkout] Previous checkout could not be released: ' . $e->getMessage());
+            $session->set('checkout_error', 'Something went wrong. Please try again.');
+            $session->set('checkout_values', $values);
+            go($page->url());
+        }
+
+        // It was paid in the meantime: the success page confirms it, nothing is charged twice
+        if ($paidSessionId) {
+            go($site->find('success')->url() . '?session_id=' . urlencode($paidSessionId));
+        }
+
         // Stored as typed: templates and emails escape on output
         $buyerInfo = array_diff_key($values, ['message' => true]) + ['additionalInformations' => $values['message']];
 

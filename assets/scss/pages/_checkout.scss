@@ -17,10 +17,9 @@
     }
   }
 
-  // No border (the reset strips it), just a light fill
   &__input {
     width: 100%;
-    padding: var(--space-xxs); // keeps the text off the fill's edge
+    padding: var(--space-xxs);
     background-color: var(--color-field);
 
     &--textarea {
@@ -32,14 +31,12 @@
     color: var(--color-error);
   }
 
-  // Same look as the drawer's checkout link and the header cart button
   &__submit {
     align-self: start;
     margin-top: var(--space-xs);
     font-size: var(--fs-large);
   }
 
-  // Bot trap, see the checkout controller
   &__honeypot {
     display: none;
   }

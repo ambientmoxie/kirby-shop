@@ -1,7 +1,6 @@
 @use "../abstracts/breakpoints" as *;
 @use "../abstracts/mixins" as *;
 
-// drawer.js toggles .is-open on the drawer and .is-drawer-open on body
 .cart-drawer {
   position: fixed;
   inset: 0;
@@ -34,11 +33,6 @@
     flex-direction: column;
     background-color: var(--color-bg);
     border-left: var(--border);
-    transform: translateX(100%);
-  }
-
-  &.is-open &__panel {
-    transform: translateX(0);
   }
 
   &__head,
@@ -47,7 +41,6 @@
     padding: var(--page-padding);
   }
 
-  // Title and subtotal on the left, close button pushed right
   &__head {
     display: flex;
     align-items: baseline;
@@ -66,7 +59,6 @@
     @include button-text;
   }
 
-  // The only scrolling region, so a long cart can't push checkout off screen
   &__items {
     flex: 1;
     overflow-y: auto;
@@ -90,14 +82,12 @@
     margin-right: auto;
   }
 
-  // Same look as the drawer title and the header cart button
   &__checkout {
-    align-self: start; // clickable on the text only, not the full row
+    align-self: start;
     font-size: var(--fs-large);
   }
 }
 
-// Stop the page behind the drawer from scrolling
 body.is-drawer-open {
   overflow: hidden;
 }

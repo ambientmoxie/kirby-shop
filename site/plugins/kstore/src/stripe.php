@@ -92,6 +92,44 @@ function startStripeCheckout(Page $order, array $lines): ?string
     return $stripeSession->url;
 }
 
+// A visitor who leaves Stripe (closed tab, Back link) and checks out again would hold two
+// reservations, and the first could block the second. Called before placing the new order:
+// the previous pending order is released (its open Stripe session expired so the old tab
+// can't be paid, then the order deleted). Returns the previous Stripe session id if it was
+// paid after all, so the caller sends the visitor to the success page instead of charging twice.
+// Throws if Stripe can't be reached: the old order is kept and checkout must not go on.
+function releasePreviousCheckout(string $orderId): ?string
+{
+    if ($orderId === '') return null;
+
+    return withLock('orders', function () use ($orderId) {
+        $order = findOrder($orderId);
+        if (!$order || $order->state()->value() !== 'pending' || $order->paymentMethod()->value() !== 'stripe') {
+            return null;
+        }
+
+        $sessionId = $order->stripeSessionId()->value();
+        if ($sessionId === '') {
+            // shortcut: without the session id it can't be expired, so the order is kept (it may
+            // still be paid) and its reservation lapses on its own; rare (id save failed)
+            error_log("[order {$orderId}] Previous checkout has no Stripe session id, not released.");
+            return null;
+        }
+
+        $stripeSession = stripeSession($sessionId);
+        if ($stripeSession->payment_status === 'paid') {
+            return $sessionId;
+        }
+        if ($stripeSession->status === 'open') {
+            $stripeSession->expire();
+        }
+
+        kirby()->impersonate('kirby');
+        $order->delete();
+        return null;
+    });
+}
+
 // Called from the success page. The payment is checked with Stripe itself: a session id
 // from a URL proves nothing. Returns null when nothing can be confirmed.
 function finalizeFromStripe(string $stripeSessionId): ?Page

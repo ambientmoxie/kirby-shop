@@ -30,35 +30,6 @@ Keep `VITE_DEV=true` in `.env` for local work: it serves assets from Vite, enabl
 - **Emails**: receipt to the buyer, summary to the admin.
 - **Newsletter** signup, stored in the panel.
 
-## How checkout works
-
-1. When the customer places the order, it is saved as *pending* with a copy of its items, prices and buyer, and its stock is reserved for 40 minutes. Adding to the cart reserves nothing.
-2. The customer pays on Stripe (the session expires after 31 minutes, before the reservation).
-3. Back on the success page, the payment is verified with Stripe. The order moves through *confirmed* → *inventory processed* → *completed*, each step saved so a failure can be retried without repeating the others.
-4. Unpaid reservations expire on their own. Expired Stripe sessions are checked at the next checkout: paid ones are completed, unpaid ones deleted.
-
-Without Stripe, the order is confirmed and its stock decremented right away, so no reservation is held: the vendor collects payment.
-
-In the panel, orders are sorted into **To fulfil**, **Awaiting payment**, **Complete** and **Issue**. An order lands in *Issue* when a step fails (wrong amount, stock shortage…), with the error shown on the order.
-
-## Project structure
-
-```
-assets/              # Source JS and SCSS (abstracts, base, layout, sections, components, pages)
-content/             # Pages, products and orders
-public/              # Document root: index.php, build/ (generated)
-site/
-  blueprints/        # Panel forms
-  controllers/       # Checkout, success, newsletter
-  plugins/kstore/    # Store logic
-    src/cart/        #   cart routes
-    src/orders/      #   order lifecycle, stock, numbers, emails
-    src/stripe.php   #   Stripe checks
-  snippets/          # layout, sections, components
-  templates/         # home, checkout, success, emails
-  storage/           # order counter and locks (generated, not in git)
-```
-
 ## Environment variables
 
 | Variable | Description |

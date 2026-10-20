@@ -1,23 +1,17 @@
 @use "../abstracts/breakpoints" as *;
 
-// Design tokens: every color, size and spacing value used by the site.
-// Components read these instead of hard-coding values.
 :root {
-  // Colors
   --color-bg: #fff;
   --color-text: #000;
-  --color-muted: #c0c0c0; // secondary text (legal footer)
-  --color-error: #e5484d; // form errors
-  --color-accent: #000fa6; // actions (add to cart)
-  --color-field: #f4f4f4; // checkout inputs
+  --color-muted: #c0c0c0;
+  --color-error: #e5484d;
+  --color-accent: #000fa6;
+  --color-field: #f4f4f4;
 
-  // Typography
   --font-body: Arial, Helvetica, sans-serif;
-  --fs-large: 3rem; // titles and main actions
+  --fs-large: 3rem;
   --fs-base: 1.6rem;
-  --fs-small: 1.6rem;
 
-  // Spacing scale
   --space-xxs: 0.5rem;
   --space-xs: 1rem;
   --space-s: 1.5rem;
@@ -25,29 +19,22 @@
   --space-l: 3rem;
   --space-xl: 5rem;
 
-  // Layout
   --page-padding: var(--space-xs);
-  --section-gap: var(--space-xl); // between header, product list and footer
+  --section-gap: var(--space-xl);
 
-  // Form controls
   --border: 1px solid var(--color-text);
-  --field-width: 20rem; // newsletter email
-  --form-width: 100rem; // checkout form
+  --field-width: 20rem;
+  --form-width: 100rem;
 
-  // Product list
-  --preview-width: 30rem; // hovered product image
+  --preview-width: 30rem;
 
-  // Cart drawer
-  --thumb-size: 8rem; // product image in a cart line
-  --color-overlay: rgba(0, 0, 0, 0.3); // backdrop behind the drawer
+  --thumb-size: 8rem;
+  --color-overlay: rgba(0, 0, 0, 0.3);
 
-  // Motion
   --transition: 0.2s ease;
 
-  // Stacking
   --z-drawer: 20;
 
-  // Large type shrinks on phones
   @include below($phone) {
     --fs-large: 2.4rem;
   }

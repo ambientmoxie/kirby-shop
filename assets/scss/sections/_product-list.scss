@@ -9,14 +9,13 @@
     width: fit-content;
     text-align: left;
 
-    // Label slides in before the name, like nesrartfoundation.com's arrow
     &::before {
       content: "Add to cart ";
       display: inline-block;
       vertical-align: bottom;
-      white-space: pre; // keeps the trailing space
+      white-space: pre;
       overflow: hidden;
-      max-width: 0; // max-width, not width: the label's width depends on the font
+      max-width: 0;
       color: var(--color-accent);
       transition: max-width var(--transition);
     }
@@ -26,15 +25,13 @@
     }
   }
 
-  // Preview of the hovered product. Hidden with visibility, not display,
-  // so the lazy loader still fetches it and it shows without delay.
   &__image {
     position: absolute;
     right: var(--space-xs);
     bottom: var(--space-xs);
     width: var(--preview-width);
     visibility: hidden;
-    pointer-events: none; // never steals the hover from the list
+    pointer-events: none;
 
     .picture__img {
       width: 100%;

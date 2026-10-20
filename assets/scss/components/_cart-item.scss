@@ -5,7 +5,6 @@
   grid-template-columns: var(--thumb-size) 1fr;
   gap: var(--space-m);
 
-  // picture.php prints width/height attributes; height: auto keeps the ratio
   &__image .picture__img {
     width: 100%;
     height: auto;
@@ -25,7 +24,6 @@
   &__actions {
     display: flex;
     gap: var(--space-m);
-    font-size: var(--fs-small);
   }
 
   &__action {

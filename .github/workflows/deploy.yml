@@ -1,0 +1,78 @@
+name: Deploy Kirby Store (Kirby on Infomaniak)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---- Node / Vite ----
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Create .env file
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: printenv ENV_FILE > .env
+
+      - name: Build assets (Vite)
+        run: npm run build
+
+      # ---- PHP / Composer ----
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          tools: composer
+
+      - name: Composer install (prod)
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      # ---- SSH for rsync ----
+      - name: Start ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Add known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      # ---- Deploy (mirror) ----
+      - name: Rsync deploy to Infomaniak (preserve .license)
+        run: |
+          TARGET="${{ secrets.DEPLOY_TARGET_PATH }}"
+
+          # Ensure target exists
+          ssh "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" "mkdir -p '$TARGET'"
+
+          rsync -az --delete \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "node_modules/" \
+            --exclude "media/" \
+            --exclude "site/cache/" \
+            --exclude "site/sessions/" \
+            --exclude "site/logs/" \
+            --exclude "site/accounts/" \
+            --exclude "site/config/.license" \
+            --exclude "/docker-compose.yml" \
+            --exclude "/Dockerfile" \
+            ./ \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:$TARGET/"
