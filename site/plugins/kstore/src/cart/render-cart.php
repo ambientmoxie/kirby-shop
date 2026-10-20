@@ -13,7 +13,7 @@ function renderCartItemsMarkup(): string
     // Lines carry the product's current colour and price
     $html = '';
     foreach ($lines as $line) {
-        $html .= snippet('components/cart-item', [
+        $html .= snippet('kstore/cart-item', [
             'product'  => $line['product'],
             'quantity' => $line['quantity'],
             'color'    => $line['color'],

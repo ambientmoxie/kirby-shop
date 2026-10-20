@@ -19,6 +19,9 @@ Kirby::plugin('kirbyshop/kstore', [
         'kstore/tabs/orders'          => __DIR__ . '/blueprints/tabs/orders.yml',
         'kstore/fields/stripe-enabled' => __DIR__ . '/blueprints/fields/stripe-enabled.yml',
     ],
+    'snippets' => [
+        'kstore/cart-item' => __DIR__ . '/snippets/cart-item.php',
+    ],
     // Kirby looks emails up as {name}.html and {name}.text
     'templates' => [
         'emails/checkout/receipt.html'        => __DIR__ . '/templates/emails/checkout/receipt.html.php',

@@ -1,4 +1,7 @@
 <?php
+// Default cart line, rendered by renderCartItemsMarkup(). Override it with
+// site/snippets/kstore/cart-item.php. kstore.js relies on the data-cart-* attributes:
+// keep them in any override.
 $product  ??= null;
 $quantity ??= 1;
 if (!$product) return;
@@ -11,14 +14,10 @@ $cover = $product->productImage()->toFile();
 
 <article
     class="cart-item"
-    data-cart-item="<?= esc($product->uuid()->id()) ?>">
+    data-cart-item="<?= esc($product->uuid()->id(), 'attr') ?>">
 
     <?php if ($cover): ?>
-        <?php snippet('components/picture', [
-            'image' => $cover,
-            'sizes' => '80px', // matches --thumb-size
-            'class' => 'cart-item__image',
-        ]) ?>
+        <img class="cart-item__image" src="<?= $cover->resize(160)->url() ?>" alt="<?= esc($cover->alt()->value(), 'attr') ?>" loading="lazy">
     <?php endif ?>
 
     <div class="cart-item__meta">
