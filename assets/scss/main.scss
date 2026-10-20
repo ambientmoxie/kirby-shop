@@ -5,17 +5,16 @@
 
 // Layout: shared by every page
 @use "layout/header";
-@use "layout/footer";
+// @use "layout/footer";
 
 // Sections: home page sections
 @use "sections/product-list";
 
 // Components: reusable blocks
-@use "components/product";
 @use "components/newsletter";
-@use "components/cart-button";
 @use "components/cart-drawer";
 @use "components/cart-item";
 
 // Pages: page-specific layouts
 @use "pages/checkout";
+@use "pages/success";

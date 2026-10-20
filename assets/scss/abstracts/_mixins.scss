@@ -1,22 +1,4 @@
-// Solid button (newsletter submit, cart checkout)
-@mixin button-primary {
-  padding: var(--space-s) var(--space-xxl);
-  font-size: var(--fs-xsmall);
-  font-weight: 700;
-  text-transform: uppercase;
-  background-color: var(--color-text);
-  color: var(--color-bg);
-}
-
-// Boxed text input (newsletter, checkout)
-@mixin field {
-  display: block;
-  height: var(--field-height);
-  padding: var(--space-m);
-  border: var(--border);
-}
-
-// Button that reads as plain text (cart button, drawer close, cart line actions)
+// Button that reads as plain text (drawer close, cart line actions)
 @mixin button-text {
   &:hover {
     text-decoration: underline;

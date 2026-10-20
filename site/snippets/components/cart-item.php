@@ -14,9 +14,11 @@ $cover = $product->productImage()->toFile();
     data-cart-item="<?= esc($product->uuid()->id()) ?>">
 
     <?php if ($cover): ?>
-        <div class="cart-item__image">
-            <?php snippet('components/picture', ['image' => $cover, 'sizes' => '80px']) ?>
-        </div>
+        <?php snippet('components/picture', [
+            'image' => $cover,
+            'sizes' => '80px', // matches --thumb-size
+            'class' => 'cart-item__image',
+        ]) ?>
     <?php endif ?>
 
     <div class="cart-item__meta">

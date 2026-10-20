@@ -1,5 +1,3 @@
-@use "../abstracts/mixins" as *;
-
 .checkout {
   max-width: var(--form-width);
 
@@ -19,12 +17,13 @@
     }
   }
 
+  // No border (the reset strips it), just a light fill
   &__input {
-    @include field;
     width: 100%;
+    padding: var(--space-xxs); // keeps the text off the fill's edge
+    background-color: var(--color-field);
 
     &--textarea {
-      height: auto;
       resize: vertical;
     }
   }
@@ -33,10 +32,11 @@
     color: var(--color-error);
   }
 
+  // Same look as the drawer's checkout link and the header cart button
   &__submit {
-    @include button-primary;
-    align-self: flex-start;
+    align-self: start;
     margin-top: var(--space-xs);
+    font-size: var(--fs-large);
   }
 
   // Bot trap, see the checkout controller

@@ -1,5 +1,3 @@
-<?php snippet('layout/header') ?>
-
 <?php
 $message = match ($type) {
     'newsletter' => "Congrats, you're on the list.",
@@ -7,10 +5,12 @@ $message = match ($type) {
     default      => 'Thank you.',
 };
 ?>
+<?php snippet('layout/head') ?>
+<?php snippet('layout/header') ?>
 
 <section class="success">
     <h1 class="success__title"><?= esc($message) ?></h1>
-    <a href="<?= $site->url() ?>" class="success__button">Back to home</a>
 </section>
 
 <?php snippet('layout/footer') ?>
+<?php snippet('layout/foot') ?>

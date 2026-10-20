@@ -1,5 +1,5 @@
 // Slide-over cart. Opened by [data-cart-open], closed by [data-cart-close],
-// the backdrop, or Escape. Contents are kept in sync by KStore.refreshCart().
+// the backdrop, or Escape. Contents are kept in sync by KStore.refresh().
 export default function initCartDrawer() {
   const drawer = document.getElementById("cart-drawer");
   if (!drawer) return;

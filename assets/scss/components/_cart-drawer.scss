@@ -1,3 +1,4 @@
+@use "../abstracts/breakpoints" as *;
 @use "../abstracts/mixins" as *;
 
 // drawer.js toggles .is-open on the drawer and .is-drawer-open on body
@@ -29,13 +30,11 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width: var(--drawer-width);
     display: flex;
     flex-direction: column;
     background-color: var(--color-bg);
     border-left: var(--border);
     transform: translateX(100%);
-    transition: transform var(--transition);
   }
 
   &.is-open &__panel {
@@ -48,23 +47,26 @@
     padding: var(--page-padding);
   }
 
+  // Title and subtotal on the left, close button pushed right
   &__head {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
-    border-bottom: var(--border);
+    gap: var(--space-s);
+
+    @include below($phone) {
+      flex-wrap: wrap;
+    }
   }
 
   &__title {
-    font-weight: 700;
-    text-transform: uppercase;
+    font-size: var(--fs-large);
   }
 
   &__close {
     @include button-text;
   }
 
-  // The only scrolling region, so a long cart can't push the footer off screen
+  // The only scrolling region, so a long cart can't push checkout off screen
   &__items {
     flex: 1;
     overflow-y: auto;
@@ -80,18 +82,18 @@
   &__foot {
     display: flex;
     flex-direction: column;
-    gap: var(--space-m);
-    border-top: var(--border);
   }
 
   &__subtotal {
     display: flex;
-    justify-content: space-between;
+    gap: var(--space-s);
+    margin-right: auto;
   }
 
+  // Same look as the drawer title and the header cart button
   &__checkout {
-    @include button-primary;
-    text-align: center;
+    align-self: start; // clickable on the text only, not the full row
+    font-size: var(--fs-large);
   }
 }
 

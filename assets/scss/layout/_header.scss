@@ -1,19 +1,31 @@
+@use "../abstracts/breakpoints" as *;
+
 .header {
-  &__title {
-    font-size: var(--fs-display);
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-xs);
+
+  // Logo and cart on the first row, intro full width below
+  @include below($mobile) {
+    grid-template-columns: 1fr auto;
   }
 
-  &__tagline {
-    font-weight: 700;
-    text-transform: uppercase;
+  // The reset caps the logo at 100% width; keep its height in proportion
+  &__title svg {
+    height: auto;
   }
 
-  // Same look as the add-to-cart link
-  &__intro a {
-    color: var(--color-accent);
-    text-decoration: underline;
+  &__intro {
+    align-self: end;
+
+    @include below($mobile) {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__cart {
+    align-self: start;
+    font-size: var(--fs-large);
   }
 }

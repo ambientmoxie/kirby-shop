@@ -1,22 +1,48 @@
-@use "../abstracts/breakpoints" as *;
-
 .product-list {
   &__grid {
     display: grid;
-    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-    gap: var(--grid-gap);
+    width: fit-content;
+    gap: var(--space-xxs);
+  }
 
-    // Fewer columns as the screen narrows: 4 → 3 → 2 → 1
-    @include below($tablet) {
-      --grid-columns: 3;
+  &__product {
+    width: fit-content;
+    text-align: left;
+
+    // Label slides in before the name, like nesrartfoundation.com's arrow
+    &::before {
+      content: "Add to cart ";
+      display: inline-block;
+      vertical-align: bottom;
+      white-space: pre; // keeps the trailing space
+      overflow: hidden;
+      max-width: 0; // max-width, not width: the label's width depends on the font
+      color: var(--color-accent);
+      transition: max-width var(--transition);
     }
 
-    @include below($mobile) {
-      --grid-columns: 2;
+    &:not(:disabled):is(:hover, :focus-visible)::before {
+      max-width: 12ch;
     }
+  }
 
-    @include below($phone) {
-      --grid-columns: 1;
+  // Preview of the hovered product. Hidden with visibility, not display,
+  // so the lazy loader still fetches it and it shows without delay.
+  &__image {
+    position: absolute;
+    right: var(--space-xs);
+    bottom: var(--space-xs);
+    width: var(--preview-width);
+    visibility: hidden;
+    pointer-events: none; // never steals the hover from the list
+
+    .picture__img {
+      width: 100%;
+      height: auto;
     }
+  }
+
+  &__product:is(:hover, :focus-visible) + &__image {
+    visibility: visible;
   }
 }

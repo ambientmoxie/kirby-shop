@@ -6,6 +6,10 @@
 
         <div class="cart-drawer__head">
             <h2 class="cart-drawer__title" id="cart-drawer-title">Your cart</h2>
+            <p class="cart-drawer__subtotal">
+                Subtotal
+                <span data-cart-subtotal><?= formatPrice(cartSubtotal()) ?></span>
+            </p>
             <button type="button" class="cart-drawer__close" data-cart-close aria-label="Close cart">Close</button>
         </div>
 
@@ -14,10 +18,6 @@
         </div>
 
         <div class="cart-drawer__foot">
-            <p class="cart-drawer__subtotal">
-                Subtotal
-                <span data-cart-subtotal><?= formatPrice(cartSubtotal()) ?></span>
-            </p>
             <a href="<?= site()->find('checkout')->url() ?>" class="cart-drawer__checkout">Checkout</a>
         </div>
 

@@ -1,3 +1,4 @@
+<?php snippet('layout/head') ?>
 <?php
 $payment = isStripeEnabled()
     ? 'You will be redirected to Stripe for payment.'
@@ -5,8 +6,7 @@ $payment = isStripeEnabled()
 
 // kstore.js keeps [data-cart-subtotal] in sync when the cart changes
 snippet('layout/header', [
-    'tagline' => 'checkout',
-    'intro'   => 'You are about to place an order of <span data-cart-subtotal>' . formatPrice(cartSubtotal()) . '</span>. ' . $payment,
+    'intro' => 'You are about to place an order of <span data-cart-subtotal>' . formatPrice(cartSubtotal()) . '</span>. ' . $payment,
 ]);
 ?>
 
@@ -18,37 +18,21 @@ snippet('layout/header', [
         <input type="hidden" name="form_start" id="form-start">
 
         <div class="checkout__row">
-            <div class="checkout__field">
-                <input class="checkout__input" type="text" id="name" name="name" placeholder="First name" aria-label="First name" required autocomplete="given-name" value="<?= esc($values['name'] ?? '') ?>">
-            </div>
-            <div class="checkout__field">
-                <input class="checkout__input" type="text" id="surname" name="surname" placeholder="Last name" aria-label="Last name" required autocomplete="family-name" value="<?= esc($values['surname'] ?? '') ?>">
-            </div>
+            <input class="checkout__input" type="text" id="name" name="name" placeholder="First name" aria-label="First name" required autocomplete="given-name" value="<?= esc($values['name'] ?? '') ?>">
+            <input class="checkout__input" type="text" id="surname" name="surname" placeholder="Last name" aria-label="Last name" required autocomplete="family-name" value="<?= esc($values['surname'] ?? '') ?>">
         </div>
 
-        <div class="checkout__field">
-            <input class="checkout__input" type="email" id="email" name="email" placeholder="Email" aria-label="Email" required autocomplete="email" value="<?= esc($values['email'] ?? '') ?>">
-        </div>
+        <input class="checkout__input" type="email" id="email" name="email" placeholder="Email" aria-label="Email" required autocomplete="email" value="<?= esc($values['email'] ?? '') ?>">
 
-        <div class="checkout__field">
-            <input class="checkout__input" type="text" id="address" name="address" placeholder="Address" aria-label="Address" required autocomplete="street-address" value="<?= esc($values['address'] ?? '') ?>">
-        </div>
+        <input class="checkout__input" type="text" id="address" name="address" placeholder="Address" aria-label="Address" required autocomplete="street-address" value="<?= esc($values['address'] ?? '') ?>">
 
         <div class="checkout__row checkout__row--3">
-            <div class="checkout__field">
-                <input class="checkout__input" type="text" id="zipcode" name="zipcode" placeholder="Zip code" aria-label="Zip code" required autocomplete="postal-code" value="<?= esc($values['zipcode'] ?? '') ?>">
-            </div>
-            <div class="checkout__field">
-                <input class="checkout__input" type="text" id="city" name="city" placeholder="City" aria-label="City" required autocomplete="address-level2" value="<?= esc($values['city'] ?? '') ?>">
-            </div>
-            <div class="checkout__field">
-                <input class="checkout__input" type="text" id="country" name="country" placeholder="Country" aria-label="Country" required autocomplete="country-name" value="<?= esc($values['country'] ?? '') ?>">
-            </div>
+            <input class="checkout__input" type="text" id="zipcode" name="zipcode" placeholder="Zip code" aria-label="Zip code" required autocomplete="postal-code" value="<?= esc($values['zipcode'] ?? '') ?>">
+            <input class="checkout__input" type="text" id="city" name="city" placeholder="City" aria-label="City" required autocomplete="address-level2" value="<?= esc($values['city'] ?? '') ?>">
+            <input class="checkout__input" type="text" id="country" name="country" placeholder="Country" aria-label="Country" required autocomplete="country-name" value="<?= esc($values['country'] ?? '') ?>">
         </div>
 
-        <div class="checkout__field">
-            <textarea class="checkout__input checkout__input--textarea" id="message" name="message" rows="3" placeholder="Additional information" aria-label="Additional information"><?= esc($values['message'] ?? '') ?></textarea>
-        </div>
+        <textarea class="checkout__input checkout__input--textarea" id="message" name="message" rows="3" placeholder="Additional information" aria-label="Additional information"><?= esc($values['message'] ?? '') ?></textarea>
 
         <?php if ($error): ?>
             <p class="checkout__error" role="alert"><?= esc($error) ?></p>
@@ -61,3 +45,4 @@ snippet('layout/header', [
 </div>
 
 <?php snippet('layout/footer') ?>
+<?php snippet('layout/foot') ?>

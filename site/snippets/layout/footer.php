@@ -1,6 +1,4 @@
 <footer class="footer">
-    <?php snippet('components/newsletter') ?>
-
     <p class="footer__legal">
         krbshp, self-hosted e-commerce starter<br>
         Built with Kirby CMS and Stripe Checkout<br>
@@ -10,5 +8,3 @@
 </footer>
 
 <?php snippet('components/cart-drawer') ?>
-
-<?php snippet('layout/foot') ?>

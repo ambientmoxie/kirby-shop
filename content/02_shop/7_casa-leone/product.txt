@@ -6,9 +6,7 @@ Shortdescription: Braided calfskin mule
 
 ----
 
-Productimage:
-
-- file://8h94kufp1wp9nfe8
+Productimage: - file://8h94kufp1wp9nfe8
 
 ----
 
@@ -24,7 +22,7 @@ Price: 1620
 
 ----
 
-Stock: 20
+Stock: 19
 
 ----
 

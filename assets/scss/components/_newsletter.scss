@@ -1,19 +1,12 @@
-@use "../abstracts/mixins" as *;
-
 .newsletter {
-  &__input {
-    @include field;
-    width: var(--field-width);
-    max-width: 100%; // shrinks to the screen on mobile
-    margin: var(--space-xs) 0;
-  }
-
-  &__submit {
-    @include button-primary;
-  }
-
-  // Bot trap, see site.php
   &__honeypot {
     display: none;
+  }
+
+  &__form {
+    display: grid;
+    gap: var(--space-xs);
+    grid-template-columns: auto minmax(0, var(--field-width)) auto;
+    justify-content: start;
   }
 }

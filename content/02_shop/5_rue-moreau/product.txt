@@ -6,9 +6,7 @@ Shortdescription: Hand-sewn penny loafer
 
 ----
 
-Productimage:
-
-- file://b0j0wq98gd996cm5
+Productimage: - file://b0j0wq98gd996cm5
 
 ----
 
@@ -24,7 +22,7 @@ Price: 2750
 
 ----
 
-Stock: 20
+Stock: 19
 
 ----
 
