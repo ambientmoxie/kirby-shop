@@ -11,6 +11,21 @@ require_once __DIR__ . '/src/cart/update-cart-item.php';
 require_once __DIR__ . '/src/cart/render-cart.php';
 
 Kirby::plugin('kirbyshop/kstore', [
+    // A file with the same name in site/blueprints or site/templates overrides these
+    'blueprints' => [
+        'pages/product'               => __DIR__ . '/blueprints/pages/product.yml',
+        'pages/order'                 => __DIR__ . '/blueprints/pages/order.yml',
+        'pages/orders'                => __DIR__ . '/blueprints/pages/orders.yml',
+        'kstore/tabs/orders'          => __DIR__ . '/blueprints/tabs/orders.yml',
+        'kstore/fields/stripe-enabled' => __DIR__ . '/blueprints/fields/stripe-enabled.yml',
+    ],
+    // Kirby looks emails up as {name}.html and {name}.text
+    'templates' => [
+        'emails/checkout/receipt.html'        => __DIR__ . '/templates/emails/checkout/receipt.html.php',
+        'emails/checkout/receipt.text'        => __DIR__ . '/templates/emails/checkout/receipt.text.php',
+        'emails/checkout/checkout-admin.html' => __DIR__ . '/templates/emails/checkout/checkout-admin.html.php',
+        'emails/checkout/checkout-admin.text' => __DIR__ . '/templates/emails/checkout/checkout-admin.text.php',
+    ],
     'routes' => [
         [
             'pattern' => 'kstore/cart/add',

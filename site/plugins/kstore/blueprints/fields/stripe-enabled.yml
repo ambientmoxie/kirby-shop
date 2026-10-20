@@ -1,0 +1,7 @@
+# Off: orders are confirmed right away and the vendor collects payment (see checkout.php)
+label: Stripe Enabled
+type: toggle
+text:
+  - "no"
+  - "yes"
+default: false

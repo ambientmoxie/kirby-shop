@@ -4,6 +4,10 @@ Title: Kirby Shop
 
 Newsletter:
 
+- 
+  date: 2026-10-20
+  value: maximebenoit03@gmail.com
+
 ----
 
 Stripeenabled: true
