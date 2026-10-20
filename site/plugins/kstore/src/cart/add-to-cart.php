@@ -20,20 +20,8 @@ function addToCart()
         return Response::json(['error' => true, 'message' => 'No more stock available for this item'], 409);
     }
 
-    $cart   = cartSessionItems();
-    $index  = cartLineIndex($cart, $id);
-    $inCart = $index === null ? 0 : $cart[$index]['quantity'];
-
-    $line = [
-        'id'       => $id,
-        'quantity' => min($inCart + $quantity, $stock),
-    ];
-
-    if ($index === null) {
-        $cart[] = $line;
-    } else {
-        $cart[$index] = $line;
-    }
+    $cart      = cartSessionItems();
+    $cart[$id] = min(($cart[$id] ?? 0) + $quantity, $stock);
 
     kirby()->session()->set('cart', $cart);
     return Response::json($cart);

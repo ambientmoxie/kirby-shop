@@ -8,7 +8,6 @@ require_once __DIR__ . '/src/orders/emails.php';
 require_once __DIR__ . '/src/stripe.php';
 require_once __DIR__ . '/src/cart/add-to-cart.php';
 require_once __DIR__ . '/src/cart/update-cart-item.php';
-require_once __DIR__ . '/src/cart/remove-from-cart.php';
 require_once __DIR__ . '/src/cart/render-cart.php';
 
 Kirby::plugin('kirbyshop/kstore', [
@@ -22,11 +21,6 @@ Kirby::plugin('kirbyshop/kstore', [
             'pattern' => 'kstore/cart/update',
             'method'  => 'POST',
             'action'  => fn() => updateCartItem(),
-        ],
-        [
-            'pattern' => 'kstore/cart/remove',
-            'method'  => 'POST',
-            'action'  => fn() => removeFromCart(),
         ],
         // Cart HTML, subtotal and count for partial JS updates
         [

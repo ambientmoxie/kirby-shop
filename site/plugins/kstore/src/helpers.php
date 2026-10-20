@@ -37,29 +37,16 @@ function withLock(string $name, callable $fn): mixed
     }
 }
 
-// Cart lines stored in the session: only id (page UUID) and quantity. Title, colour,
+// The cart in the session: [product page UUID => quantity], nothing else. Title, colour,
 // price and stock are always read from the product page, so an edit in the Panel
 // applies to carts that already contain the product.
+// PHP turns all-digit keys into ints: cast ids back with (string) when reading them.
 function cartSessionItems(): array
 {
     $cart = kirby()->session()->get('cart', []);
     if (!is_array($cart)) return [];
 
-    // Normalise, merging duplicate ids (older carts were keyed on id + colour)
-    $lines = [];
-    foreach ($cart as $item) {
-        $id  = (string)($item['id'] ?? '');
-        $qty = (int)($item['quantity'] ?? 0);
-        if ($id === '' || $qty < 1) continue;
-
-        $lines[$id] = ($lines[$id] ?? 0) + $qty;
-    }
-
-    return array_map(
-        fn($id, $qty) => ['id' => $id, 'quantity' => $qty],
-        array_keys($lines),
-        $lines
-    );
+    return array_filter($cart, fn($qty, $id) => $id !== '' && is_int($qty) && $qty > 0, ARRAY_FILTER_USE_BOTH);
 }
 
 // Product page for a cart line id (the page UUID), or null if it no longer exists
@@ -77,32 +64,21 @@ function isPurchasable(?Page $product): bool
     return $product !== null && !$product->isDraft() && $product->price()->isNotEmpty();
 }
 
-// Position of the line for this product id, or null
-function cartLineIndex(array $cart, string $id): ?int
-{
-    foreach ($cart as $index => $item) {
-        if (($item['id'] ?? '') === $id) {
-            return $index;
-        }
-    }
-    return null;
-}
-
 // Session lines resolved against Kirby, with the product's current values.
 // Lines whose product is gone or no longer purchasable are left out.
 function cartLines(): array
 {
     $lines = [];
-    foreach (cartSessionItems() as $item) {
-        $product = cartProduct($item['id']);
+    foreach (cartSessionItems() as $id => $qty) {
+        $product = cartProduct((string)$id);
         if (!isPurchasable($product)) continue;
 
         $lines[] = [
-            'id'       => $item['id'],
+            'id'       => (string)$id,
             'product'  => $product,
             'color'    => (string)$product->color()->value(),
             'price'    => $product->price()->toFloat(),
-            'quantity' => $item['quantity'],
+            'quantity' => $qty,
         ];
     }
     return $lines;
@@ -110,7 +86,7 @@ function cartLines(): array
 
 function cartCount(): int
 {
-    return array_sum(array_column(cartSessionItems(), 'quantity'));
+    return array_sum(cartSessionItems());
 }
 
 function cartSubtotal(): float
@@ -130,13 +106,13 @@ function linesTotal(array $lines): float
 function checkoutLines(): array
 {
     $session  = kirby()->session();
-    $items    = cartSessionItems();
     $lines    = [];
     $problems = [];
     $cart     = [];
 
-    foreach ($items as $item) {
-        $product = cartProduct($item['id']);
+    foreach (cartSessionItems() as $id => $qty) {
+        $id      = (string)$id;
+        $product = cartProduct($id);
 
         if (!isPurchasable($product)) {
             $problems[] = 'A product in your cart is no longer available and has been removed.';
@@ -145,7 +121,6 @@ function checkoutLines(): array
 
         $title = $product->title()->value();
         $stock = $product->stock()->toInt();
-        $qty   = $item['quantity'];
 
         if ($stock < 1) {
             $problems[] = "{$title} is out of stock and has been removed.";
@@ -157,9 +132,9 @@ function checkoutLines(): array
             $qty = $stock;
         }
 
-        $cart[]  = ['id' => $item['id'], 'quantity' => $qty];
-        $lines[] = [
-            'id'       => $item['id'],
+        $cart[$id] = $qty;
+        $lines[]   = [
+            'id'       => $id,
             'title'    => $title,
             'color'    => (string)$product->color()->value(),
             'price'    => $product->price()->toFloat(),

@@ -8,10 +8,8 @@ function updateCartItem()
     $id       = (string)($data['id'] ?? '');
     $quantity = (int)($data['quantity'] ?? 1);
 
-    $cart  = cartSessionItems();
-    $index = cartLineIndex($cart, $id);
-
-    if ($index === null) {
+    $cart = cartSessionItems();
+    if (!isset($cart[$id])) {
         return Response::json(['error' => true, 'message' => 'Item not found in cart'], 404);
     }
 
@@ -20,9 +18,9 @@ function updateCartItem()
     $quantity = min($quantity, $stock);
 
     if ($quantity <= 0) {
-        array_splice($cart, $index, 1);
+        unset($cart[$id]);
     } else {
-        $cart[$index]['quantity'] = $quantity;
+        $cart[$id] = $quantity;
     }
 
     kirby()->session()->set('cart', $cart);

@@ -1,4 +1,4 @@
-// Cart: add, update and remove through the kstore plugin routes, then re-render
+// Cart: add and update (quantity 0 removes) through the kstore plugin routes, then re-render
 // the drawer list, bag count and subtotals from the server's response.
 export default class KStore {
   constructor() {
@@ -28,7 +28,8 @@ export default class KStore {
       const quantity = parseInt(item.querySelector("[data-cart-qty]")?.dataset.cartQty ?? "1", 10);
       const action = btn.dataset.cartAction;
 
-      if (action === "remove") this.remove(id);
+      // Quantity 0 removes the line (see updateCartItem)
+      if (action === "remove") this.update(id, 0);
       else this.update(id, quantity + (action === "increase" ? 1 : -1));
     });
   }
@@ -60,11 +61,6 @@ export default class KStore {
 
   async update(id, quantity) {
     await this.#post("/kstore/cart/update", { id, quantity });
-    await this.refresh();
-  }
-
-  async remove(id) {
-    await this.#post("/kstore/cart/remove", { id });
     await this.refresh();
   }
 }

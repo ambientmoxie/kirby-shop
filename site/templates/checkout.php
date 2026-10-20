@@ -15,7 +15,6 @@ snippet('layout/header', [
     <form class="checkout__form" action="<?= $page->url() ?>" method="POST">
 
         <input type="text" name="website" class="checkout__honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <input type="hidden" name="form_start" id="form-start">
 
         <div class="checkout__row">
             <input class="checkout__input" type="text" id="name" name="name" placeholder="First name" aria-label="First name" required autocomplete="given-name" value="<?= esc($values['name'] ?? '') ?>">

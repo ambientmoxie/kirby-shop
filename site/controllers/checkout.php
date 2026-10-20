@@ -11,32 +11,22 @@ return function ($page, $site, $kirby) {
             go($page->url());
         }
 
-        $name    = trim((string)$kirby->request()->get('name'));
-        $surname = trim((string)$kirby->request()->get('surname'));
-        $email   = trim((string)$kirby->request()->get('email'));
-        $address = trim((string)$kirby->request()->get('address'));
-        $zipcode = trim((string)$kirby->request()->get('zipcode'));
-        $city    = trim((string)$kirby->request()->get('city'));
-        $country = trim((string)$kirby->request()->get('country'));
-        $message = trim((string)$kirby->request()->get('message'));
-
-        // Timing check
-        $formStart = (int)$kirby->request()->get('form_start');
-        if ($formStart > 0 && (time() * 1000 - $formStart) < 3000) {
-            $error = 'You submitted too quickly.';
+        // Every field as typed, also flashed back to the form on error
+        $fields = ['name', 'surname', 'email', 'address', 'zipcode', 'city', 'country', 'message'];
+        $values = [];
+        foreach ($fields as $field) {
+            $values[$field] = trim((string)$kirby->request()->get($field));
         }
 
-        // Required fields
-        if (!$error) {
-            foreach (compact('name', 'surname', 'email', 'address', 'zipcode', 'city', 'country') as $key => $val) {
-                if ($val === '') {
-                    $error = 'Please fill the required field: ' . ucfirst($key);
-                    break;
-                }
+        // Required fields: all but the message
+        foreach (array_diff_key($values, ['message' => true]) as $key => $val) {
+            if ($val === '') {
+                $error = 'Please fill the required field: ' . ucfirst($key);
+                break;
             }
         }
 
-        if (!$error && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!$error && !filter_var($values['email'], FILTER_VALIDATE_EMAIL)) {
             $error = 'Invalid email format.';
         }
 
@@ -56,21 +46,12 @@ return function ($page, $site, $kirby) {
 
         if ($error) {
             $session->set('checkout_error', $error);
-            $session->set('checkout_values', compact('name', 'surname', 'email', 'address', 'zipcode', 'city', 'country', 'message'));
+            $session->set('checkout_values', $values);
             go($page->url());
         }
 
         // Stored as typed: templates and emails escape on output
-        $buyerInfo = [
-            'name'                   => $name,
-            'surname'                => $surname,
-            'email'                  => $email,
-            'address'                => $address,
-            'zipcode'                => $zipcode,
-            'city'                   => $city,
-            'country'                => $country,
-            'additionalInformations' => $message,
-        ];
+        $buyerInfo = array_diff_key($values, ['message' => true]) + ['additionalInformations' => $values['message']];
 
         // The order is saved before any payment, with the lines above as its snapshot:
         // whatever happens next (payment, browser closed, failure) there is a record of it.
@@ -85,7 +66,7 @@ return function ($page, $site, $kirby) {
 
         if ($placed['problems']) {
             $session->set('checkout_error', implode(' ', $placed['problems']) . ' Please adjust your cart or try again in a few minutes.');
-            $session->set('checkout_values', compact('name', 'surname', 'email', 'address', 'zipcode', 'city', 'country', 'message'));
+            $session->set('checkout_values', $values);
             go($page->url());
         }
 

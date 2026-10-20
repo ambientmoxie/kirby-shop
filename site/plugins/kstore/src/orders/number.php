@@ -3,54 +3,39 @@
 use Kirby\Filesystem\Dir;
 
 // Display number, e.g. "KS-2026-000128" (orders are identified by orderId).
-// The counter file is read and incremented under flock(), so two orders confirmed at the
-// same moment never share a number. A missing counter (first run, lost in a deploy)
-// restarts from the highest existing order; an unreadable one throws rather than
-// silently restarting the sequence.
+// Only called from confirmOrder(), under the "orders" lock: no lock of its own needed.
+// The counter file keeps numbers from being reused after an order is deleted. A missing
+// counter (first run, lost in a deploy) restarts from the highest existing order; an
+// unreadable one throws rather than silently restarting the sequence.
 function nextOrderNumber(): string
 {
     $file = kirby()->root('site') . '/storage/order-counter';
-    Dir::make(dirname($file));
 
-    $isNew  = !is_file($file);
-    $handle = fopen($file, 'c+');
-    if ($handle === false || !flock($handle, LOCK_EX)) {
-        throw new Exception('Order counter could not be opened or locked.');
-    }
-
-    try {
-        $current = trim((string)stream_get_contents($handle));
-
-        if ($current === '' && $isNew) {
-            $last = highestOrderNumber();
-        } elseif (ctype_digit($current)) {
-            $last = (int)$current;
-        } else {
+    if (is_file($file)) {
+        $current = trim((string)file_get_contents($file));
+        if (!ctype_digit($current)) {
             throw new Exception("Order counter is unreadable ({$file}).");
         }
+        $last = (int)$current;
+    } else {
+        $last = highestOrderNumber();
+    }
 
-        $next = $last + 1;
+    $next = $last + 1;
 
-        rewind($handle);
-        ftruncate($handle, 0);
-        if (fwrite($handle, (string)$next) === false || !fflush($handle)) {
-            throw new Exception('Order counter could not be written.');
-        }
-    } finally {
-        flock($handle, LOCK_UN);
-        fclose($handle);
+    Dir::make(dirname($file));
+    if (file_put_contents($file, (string)$next) === false) {
+        throw new Exception('Order counter could not be written.');
     }
 
     return sprintf('%s-%s-%06d', option('kstore.orderPrefix', 'KS'), date('Y'), $next);
 }
 
-// Also reads old "#0042 - ..." titles from before orderNumber existed
 function highestOrderNumber(): int
 {
     $highest = 0;
     foreach (page('orders')?->childrenAndDrafts() ?? [] as $order) {
-        $source = $order->orderNumber()->or($order->title())->value();
-        if (preg_match('/(\d+)(?!.*\d)/', explode(' - ', $source)[0], $m)) {
+        if (preg_match('/(\d+)$/', $order->orderNumber()->value(), $m)) {
             $highest = max($highest, (int)$m[1]);
         }
     }
