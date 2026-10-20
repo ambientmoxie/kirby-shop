@@ -1,0 +1,102 @@
+Title: KS-2026-000001 - Maxime Benoit
+
+----
+
+Ordernumber: KS-2026-000001
+
+----
+
+Total: 3480
+
+----
+
+Items:
+
+- 
+  productid: ld5u9xomi9pym94n
+  title: >
+    Yume Yume black closed-toe Tyre slip-on
+    loafers
+  color: Charcoal
+  quantity: 1
+  price: 3480
+
+----
+
+State: completed
+
+----
+
+Paymentmethod: stripe
+
+----
+
+Lasterror: 
+
+----
+
+Emailssent: true
+
+----
+
+Emailerror: 
+
+----
+
+Createdat: 2026-10-20 14:02:03
+
+----
+
+Confirmedat: 2026-10-20 14:02:16
+
+----
+
+Reserveduntil: 2026-10-20 14:42:03
+
+----
+
+Stockapplied: ld5u9xomi9pym94n
+
+----
+
+Orderid: 6d1122c0-6f08-4931-b74d-b0d1be52cd38
+
+----
+
+Stripesessionid: cs_test_a1M0RHwLDmAbfvC7wL8wzpWtmxE7d9UkZ4E1EX8xpLTObNbaGJwfdOtZZF
+
+----
+
+Name: Maxime
+
+----
+
+Surname: Benoit
+
+----
+
+Email: maximebenoit03@gmail.com
+
+----
+
+Address: 38 Rue Jules Vanzuppe
+
+----
+
+Zipcode: 94200
+
+----
+
+City: Ivry-sur-Seine
+
+----
+
+Country: France
+
+----
+
+Additionalinformations: de
+
+----
+
+Uuid: w5vl8zhbzyg37qhd

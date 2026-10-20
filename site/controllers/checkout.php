@@ -95,70 +95,13 @@ return function ($page, $site, $kirby) {
             go($site->find('success')->url());
         }
 
-        try {
-            \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
-
-            $line_items = [];
-            foreach ($lines as $line) {
-                $title        = $line['title'];
-                $color        = $line['color'];
-                $qty          = $line['quantity'];
-                $unit_amount  = (int)round($line['price'] * 100);
-                $thumb        = $line['thumb'];
-
-                $displayName  = $color !== '' ? "{$title} — {$color}" : $title;
-                $product_data = ['name' => $displayName];
-
-                if ($thumb && str_starts_with($thumb, 'https://')) {
-                    $product_data['images'] = [$thumb];
-                }
-
-                $line_items[] = [
-                    'price_data' => [
-                        'currency'     => 'eur',
-                        'product_data' => $product_data,
-                        'unit_amount'  => $unit_amount,
-                    ],
-                    'quantity' => $qty,
-                ];
-            }
-
-            // The order id travels with the payment: Stripe hands it back with the paid
-            // session, which is how the payment is matched to its order.
-            // Stripe fills in {CHECKOUT_SESSION_ID}; the success page uses it to verify the payment.
-            $stripeSession = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'],
-                'line_items'           => $line_items,
-                'mode'                 => 'payment',
-                // Ends before the order's stock reservation does: see STOCK RESERVATIONS
-                'expires_at'           => time() + KSTORE_STRIPE_SESSION_MINUTES * 60,
-                'client_reference_id'  => $orderId,
-                'metadata'             => ['order_id' => $orderId],
-                'success_url'          => $site->find('success')->url() . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'           => $page->url(),
-            ]);
-        } catch (Throwable $e) {
-            // Nothing was charged: the pending order has nothing to record
-            error_log("[order {$orderId}] Stripe session failed: " . $e->getMessage());
-            try {
-                $order->delete();
-            } catch (Throwable $e) {
-                error_log("[order {$orderId}] Pending order could not be deleted: " . $e->getMessage());
-            }
+        $stripeUrl = startStripeCheckout($order, $lines);
+        if (!$stripeUrl) {
             $session->set('checkout_error', 'Payment could not be started. Please try again.');
             go($page->url());
         }
 
-        // Under the lock: reservations are read from the order files while it is held,
-        // so a checkout must never see this file half-written
-        try {
-            withLock('orders', fn() => $order->update(['stripeSessionId' => $stripeSession->id]));
-        } catch (Throwable $e) {
-            // Not blocking: the payment is matched through the metadata order id
-            error_log("[order {$orderId}] Stripe session id not saved: " . $e->getMessage());
-        }
-
-        go($stripeSession->url);
+        go($stripeUrl);
     }
 
     // GET: read the flashed error and values, if any

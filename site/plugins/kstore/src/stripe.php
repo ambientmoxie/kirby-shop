@@ -27,6 +27,71 @@ function stripePayment(\Stripe\Checkout\Session $stripeSession): array
     ];
 }
 
+// Opens the Stripe payment page for a pending order and returns its URL. $lines are the
+// order's lines from checkoutLines(). On failure nothing was charged: the pending order
+// is deleted (freeing its reservation) and null is returned.
+function startStripeCheckout(Page $order, array $lines): ?string
+{
+    $orderId = $order->orderId()->value();
+
+    try {
+        \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
+
+        $lineItems = [];
+        foreach ($lines as $line) {
+            $productData = ['name' => $line['color'] !== '' ? "{$line['title']} — {$line['color']}" : $line['title']];
+
+            // Stripe only accepts public https images (not localhost)
+            if (str_starts_with($line['thumb'], 'https://')) {
+                $productData['images'] = [$line['thumb']];
+            }
+
+            $lineItems[] = [
+                'price_data' => [
+                    'currency'     => 'eur',
+                    'product_data' => $productData,
+                    'unit_amount'  => (int)round($line['price'] * 100),
+                ],
+                'quantity' => $line['quantity'],
+            ];
+        }
+
+        // The order id travels with the payment: Stripe hands it back with the paid
+        // session, which is how the payment is matched to its order.
+        // Stripe fills in {CHECKOUT_SESSION_ID}; the success page uses it to verify the payment.
+        $stripeSession = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items'           => $lineItems,
+            'mode'                 => 'payment',
+            // Ends before the order's stock reservation does: see stock.php
+            'expires_at'           => time() + KSTORE_STRIPE_SESSION_MINUTES * 60,
+            'client_reference_id'  => $orderId,
+            'metadata'             => ['order_id' => $orderId],
+            'success_url'          => site()->find('success')->url() . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'           => site()->find('checkout')->url(),
+        ]);
+    } catch (Throwable $e) {
+        error_log("[order {$orderId}] Stripe session failed: " . $e->getMessage());
+        try {
+            $order->delete();
+        } catch (Throwable $e) {
+            error_log("[order {$orderId}] Pending order could not be deleted: " . $e->getMessage());
+        }
+        return null;
+    }
+
+    // Under the lock: reservations are read from the order files while it is held,
+    // so a checkout must never see this file half-written
+    try {
+        withLock('orders', fn() => $order->update(['stripeSessionId' => $stripeSession->id]));
+    } catch (Throwable $e) {
+        // Not blocking: the payment is matched through the metadata order id
+        error_log("[order {$orderId}] Stripe session id not saved: " . $e->getMessage());
+    }
+
+    return $stripeSession->url;
+}
+
 // Called from the success page. The payment is checked with Stripe itself: a session id
 // from a URL proves nothing. Returns null when nothing can be confirmed.
 function finalizeFromStripe(string $stripeSessionId): ?Page

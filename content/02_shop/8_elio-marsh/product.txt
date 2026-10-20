@@ -6,9 +6,7 @@ Shortdescription: Waxed suede hiking boot
 
 ----
 
-Productimage:
-
-- file://ru40uq9jlt98v8a6
+Productimage: - file://ru40uq9jlt98v8a6
 
 ----
 
@@ -24,7 +22,7 @@ Price: 3480
 
 ----
 
-Stock: 20
+Stock: 19
 
 ----
 
