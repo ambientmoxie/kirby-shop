@@ -28,7 +28,7 @@ function nextOrderNumber(): string
         throw new Exception('Order counter could not be written.');
     }
 
-    return sprintf('%s-%s-%06d', option('kstore.orderPrefix', 'KS'), date('Y'), $next);
+    return sprintf('%s-%s-%06d', option('kirbyshop.kstore.orderPrefix'), date('Y'), $next);
 }
 
 function highestOrderNumber(): int

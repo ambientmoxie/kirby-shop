@@ -18,8 +18,8 @@ return [
 	'url'   => $devUrl,
 	'panel' => ['install' => !empty($_ENV['VITE_DEV'])], // never allow installing the panel on a live server
 
-	// Stripe
-	'stripe' => [
+	// Store (kstore plugin): Stripe keys
+	'kirbyshop.kstore.stripe' => [
 		'publicKey' => !empty($_ENV['VITE_DEV']) ? $_ENV['STRIPE_TEST_PUBLIC_KEY'] : $_ENV['STRIPE_LIVE_PUBLIC_KEY'],
 		'secretKey' => !empty($_ENV['VITE_DEV']) ? $_ENV['STRIPE_TEST_SECRET_KEY'] : $_ENV['STRIPE_LIVE_SECRET_KEY'],
 	],

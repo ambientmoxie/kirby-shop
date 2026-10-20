@@ -11,6 +11,14 @@ require_once __DIR__ . '/src/cart/update-cart-item.php';
 require_once __DIR__ . '/src/cart/render-cart.php';
 
 Kirby::plugin('kirbyshop/kstore', [
+    // Read as option('kirbyshop.kstore.…'), set in config.php as 'kirbyshop.kstore.stripe' => [...]
+    'options' => [
+        'orderPrefix' => 'KS', // order numbers: KS-2026-000128
+        'stripe'      => [
+            'publicKey' => null,
+            'secretKey' => null,
+        ],
+    ],
     // A file with the same name in site/ (blueprints, controllers, snippets, templates) overrides these
     'blueprints' => [
         'pages/product'                => __DIR__ . '/blueprints/pages/product.yml',
@@ -44,7 +52,6 @@ Kirby::plugin('kirbyshop/kstore', [
             'method'  => 'POST',
             'action'  => fn() => updateCartItem(),
         ],
-        // Cart HTML, subtotal and count for partial JS updates
         [
             'pattern' => 'kstore/cart/render',
             'method'  => 'GET',

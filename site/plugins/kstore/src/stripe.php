@@ -13,7 +13,7 @@ function isStripeEnabled(): bool
 
 function stripeSession(string $sessionId): \Stripe\Checkout\Session
 {
-    \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
+    \Stripe\Stripe::setApiKey(option('kirbyshop.kstore.stripe.secretKey'));
     return \Stripe\Checkout\Session::retrieve($sessionId);
 }
 
@@ -35,7 +35,7 @@ function startStripeCheckout(Page $order, array $lines): ?string
     $orderId = $order->orderId()->value();
 
     try {
-        \Stripe\Stripe::setApiKey(option('stripe.secretKey'));
+        \Stripe\Stripe::setApiKey(option('kirbyshop.kstore.stripe.secretKey'));
 
         $lineItems = [];
         foreach ($lines as $line) {
