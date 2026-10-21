@@ -60,7 +60,7 @@ function startStripeCheckout(Page $order, array $lines): ?string
         // session, which is how the payment is matched to its order.
         // Stripe fills in {CHECKOUT_SESSION_ID}; the success page uses it to verify the payment.
         $stripeSession = \Stripe\Checkout\Session::create([
-            'payment_method_types' => ['card'],
+            // Payment methods come from the Stripe Dashboard (stripe-php ≥ 22 rejects payment_method_types)
             'line_items'           => $lineItems,
             'mode'                 => 'payment',
             // Ends before the order's stock reservation does: see stock.php
@@ -92,12 +92,13 @@ function startStripeCheckout(Page $order, array $lines): ?string
     return $stripeSession->url;
 }
 
-// A visitor who leaves Stripe (closed tab, Back link) and checks out again would hold two
-// reservations, and the first could block the second. Called before placing the new order:
-// the previous pending order is released (its open Stripe session expired so the old tab
-// can't be paid, then the order deleted). Returns the previous Stripe session id if it was
-// paid after all, so the caller sends the visitor to the success page instead of charging twice.
-// Throws if Stripe can't be reached: the old order is kept and checkout must not go on.
+// If a visitor leaves Stripe without completing the payment and tries to checkout again,
+// the previous order could still reserve stock and block the new one.
+// Before creating a new order, the previous pending order is released: its Stripe session
+// is expired to prevent payment, then the order is deleted.
+// If the payment was already completed, the Stripe session ID is returned to redirect
+// the visitor to the success page and avoid charging twice.
+// If Stripe cannot be reached, the previous order is kept and checkout is stopped.
 function releasePreviousCheckout(string $orderId): ?string
 {
     if ($orderId === '') return null;
@@ -156,10 +157,11 @@ function finalizeFromStripe(string $stripeSessionId): ?Page
 // If Stripe can't be reached, the order is left for the next checkout.
 function reconcileExpiredCheckouts(): void
 {
-    $expired = page('orders')?->drafts()->filter(fn($order) =>
+    $expired = page('orders')?->drafts()->filter(
+        fn($order) =>
         $order->state()->value() === 'pending' &&
-        $order->paymentMethod()->value() === 'stripe' &&
-        (strtotime($order->reservedUntil()->value()) ?: 0) <= time()
+            $order->paymentMethod()->value() === 'stripe' &&
+            (strtotime($order->reservedUntil()->value()) ?: 0) <= time()
     )->values() ?? [];
 
     foreach ($expired as $order) {

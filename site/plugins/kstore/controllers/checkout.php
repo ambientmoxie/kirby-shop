@@ -18,7 +18,10 @@ return function ($page, $site, $kirby) {
             $values[$field] = trim((string)$kirby->request()->get($field));
         }
 
-        // Required fields: all but the message
+        // Check whether all required fields are filled in. This is useful even if the "required"
+        // attribute is already specified in the form. It covers requests other than manual
+        // submissions, such as those made via cURL or bots. Without it, an order could be
+        // created and paid for without the information the vendor needs to fulfill it.
         foreach (array_diff_key($values, ['message' => true]) as $key => $val) {
             if ($val === '') {
                 $error = 'Please fill the required field: ' . ucfirst($key);
@@ -69,9 +72,10 @@ return function ($page, $site, $kirby) {
         // Stored as typed: templates and emails escape on output
         $buyerInfo = array_diff_key($values, ['message' => true]) + ['additionalInformations' => $values['message']];
 
-        // The order is saved before any payment, with the lines above as its snapshot:
-        // whatever happens next (payment, browser closed, failure) there is a record of it.
-        // Creating it reserves its stock, or fails if other checkouts hold the last units.
+        // The order is saved before payment, using the information collected above.
+        // This ensures that a record exists even if the payment fails or the user closes the browser.
+        // Creating the order also reserves the stock, unless the remaining units are already
+        // reserved by other orders.
         try {
             $placed = placeOrder($lines, $buyerInfo, isStripeEnabled() ? 'stripe' : 'offline');
         } catch (Throwable $e) {

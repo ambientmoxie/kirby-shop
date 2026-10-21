@@ -2,8 +2,8 @@ Title: Kirby Shop
 
 ----
 
-Newsletter:
+Newsletter: 
 
 ----
 
-Stripeenabled: false
+Stripeenabled: true

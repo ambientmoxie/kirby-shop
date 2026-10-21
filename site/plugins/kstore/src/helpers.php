@@ -40,13 +40,14 @@ function withLock(string $name, callable $fn): mixed
 // The cart in the session: [product page UUID => quantity], nothing else. Title, colour,
 // price and stock are always read from the product page, so an edit in the Panel
 // applies to carts that already contain the product.
-// PHP turns all-digit keys into ints: cast ids back with (string) when reading them.
 function cartSessionItems(): array
 {
     $cart = kirby()->session()->get('cart', []);
     if (!is_array($cart)) return [];
 
-    return array_filter($cart, fn($qty, $id) => $id !== '' && is_int($qty) && $qty > 0, ARRAY_FILTER_USE_BOTH);
+    return array_filter($cart,
+    fn($qty, $id) => $id !== '' && is_int($qty) && $qty > 0,
+    ARRAY_FILTER_USE_BOTH);
 }
 
 // Product page for a cart line id (the page UUID), or null if it no longer exists

@@ -23,7 +23,7 @@ Keep `VITE_DEV=true` in `.env` for local work: it serves assets from Vite, enabl
 
 ## Features
 
-- **Cart**: session-based, in a slide-over drawer. Prices and stock always come from the product pages, never the browser.
+- **Cart**: session-based in a drawer. Prices and stock always come from the product pages, never the browser.
 - **Stripe Checkout**, or **manual payment** when Stripe is turned off in the panel.
 - **Stock reservation** during payment, so the last unit can't be sold twice.
 - **Orders** as Kirby pages, managed from the panel, each with a readable number (`KS-2026-000128`).
